@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CogniSentinel - Mental Health Support</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        :root {
+            --primary: #6366f1;
+            --primary-rgb: 99, 102, 241;
+            --primary-dark: #4f46e5;
+            --primary-dark-rgb: 79, 70, 229;
+            --secondary: #a855f7;
+            --secondary-rgb: 168, 85, 247;
+            --accent: #8b5cf6;
+            --accent-rgb: 139, 92, 246;
+            --bg-dark: #111827;
+            --bg-medium: #1f2937;
+            --bg-light: #374151;
+            --text-light: #f3f4f6;
+            --text-medium: #d1d5db;
+            --text-dark: #9ca3af;
+            --success: #10b981;
+            --success-rgb: 16, 185, 129;
+            --warning: #f59e0b;
+            --warning-rgb: 245, 158, 11;
+            --danger: #ef4444;
+            --danger-rgb: 239, 68, 68;
+        }
+        
+        body {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: linear-gradient(to bottom right, rgba(99, 102, 241, 0.05), rgba(168, 85, 247, 0.05));
+        }
+        
+        .chat-container {
+            width: 100%;
+            max-width: 1000px;
+            height: 90vh;
+            background: var(--bg-medium);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .chat-header {
+            background: var(--bg-light);
+            color: var(--text-light);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo i {
+            font-size: 26px;
+            color: var(--secondary);
+            filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.5));
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #a855f7;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48cGF0aCBkPSJNNTQuMDEgNDkuOTljLS43My40My0xLjgwLjI3LTIuNDEtLjM3bC0xLjgzLTEuODNjLS42My0uNjMtLjgtMS42OC0uMzctMi40MS40My0uNzMgMS4zMy0xLjEgMi4xOC0uODRsMi44NC44NGMuODUuMjUgMS4yNSAxLjE1LjgyIDEuODhsLTEuMjMgMi43M3oiIGZpbGw9InJnYmEoMTY4LCA4NSwgMjQ3LCAwLjAzKSIvPjwvc3ZnPg==');
+        }
+        
+        .message {
+            max-width: 70%;
+            padding: 16px 20px;
+            border-radius: 18px;
+            line-height: 1.6;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+            font-size: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.bot {
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-medium));
+            color: var(--text-light);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border-left: 3px solid var(--primary);
+            max-width: 75%;
+        }
+        
+        .message.user {
+            background: linear-gradient(135deg, var(--primary-dark), var(--accent));
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            border-right: 3px solid var(--secondary);
+            max-width: 75%;
+        }
+        
+        .message.bot::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            bottom: 0;
+            width: 20px;
+            height: 20px;
+            background: var(--bg-medium);
+            border-bottom-right-radius: 16px;
+            z-index: -1;
+        }
+        
+        .message.user::before {
+            content: '';
+            position: absolute;
+            right: -8px;
+            bottom: 0;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-bottom-left-radius: 16px;
+            z-index: -1;
+        }
+        
+        .message-time {
+            font-size: 12px;
+            margin-top: 6px;
+            opacity: 0.8;
+            text-align: right;
+            color: #a0a0a0;
+        }
+        
+        .chat-input {
+            padding: 20px;
+            background: var(--bg-light);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 12px;
+            position: relative;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: var(--bg-medium);
+            color: var(--text-light);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-input input:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2), inset 0 2px 5px rgba(0, 0, 0, 0.05);
+            background: var(--bg-dark);
+        }
+        
+        .chat-input input::placeholder {
+            color: var(--text-dark);
+            font-weight: 300;
+        }
+        
+        .send-button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+        }
+        
+        .send-button:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        .send-button:active {
+            transform: scale(0.98);
+        }
+        
+        .welcome-message {
+            text-align: center;
+            padding: 35px;
+            background: linear-gradient(135deg, var(--bg-medium), var(--bg-light));
+            border-radius: 16px;
+            margin: 20px;
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjUgMzBjMy44NjYgMCA3LTMuMTM0IDctN3MtMy4xMzQtNy03LTctNyAzLjEzNC03IDcgMy4xMzQgNyA3IDd6bTUwIDQwYzMuODY2IDAgNy0zLjEzNCA3LTdzLTMuMTM0LTctNy03LTcgMy4xMzQtNyA3IDMuMTM0IDcgNyA3eiIgZmlsbD0icmdiYSgxNjgsIDg1LCAyNDcsIDAuMDUpIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=');
+            opacity: 0.5;
+        }
+        
+        .welcome-message h2 {
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 28px;
+            position: relative;
+        }
+        
+        .welcome-message p {
+            opacity: 0.9;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 16px;
+            position: relative;
+        }
+        
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .suggestion {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--text-light);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+        }
+        
+        .suggestion:hover {
+            background: rgba(99, 102, 241, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        
+        .suggestion:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Scrollbar styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: #2d2d2d;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #a855f7;
+            border-radius: 4px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #8b5cf6;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .chat-container {
+                height: 95vh;
+                border-radius: 12px;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+            
+            .chat-header {
+                padding: 15px;
+            }
+            
+            .logo h1 {
+                font-size: 20px;
+            }
+            
+            .suggestions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .suggestion {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>CogniSentinel</h1>
+            </div>
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=User-S&background=a855f7&color=fff" alt="User">
+                <span>User</span>
+            </div>
+        </div>
+        
+        <div class="chat-messages">
+            <div class="welcome-message">
+                <h2>Welcome to CogniSentinel</h2>
+                <p>I'm here to provide mental health support in a safe, judgment-free space. Everything we discuss is confidential. How are you feeling today?</p>
+                <div class="suggestions">
+                    <div class="suggestion">I'm feeling anxious</div>
+                    <div class="suggestion">I'm feeling sad</div>
+                    <div class="suggestion">I need someone to talk to</div>
+                    <div class="suggestion">What can you help me with?</div>
+                    <div class="suggestion">I'm having trouble sleeping</div>
+                    <div class="suggestion">I'm feeling overwhelmed</div>
+                </div>
+            </div>
+            
+            <div class="message bot">
+                Hello! I'm CogniSentinel, your mental health companion. I'm here to listen, support, and help you navigate your feelings. Feel free to share what's on your mind or choose from the suggestions above.
+                <div class="message-time">10:40 AM</div>
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" placeholder="Ask anything..." id="message-input">
+            <button class="send-button" id="send-button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.querySelector('.chat-messages');
+            const chatInput = document.querySelector('#message-input');
+            const sendButton = document.querySelector('#send-button');
+            const suggestions = document.querySelectorAll('.suggestion');
+            const RASA_SERVER_URL = 'http://localhost:5005/webhooks/rest/webhook';
+            
+            // Typing indicator
+            function showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.classList.add('message', 'bot', 'typing-indicator');
+                typingDiv.innerHTML = `
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <div class="message-time">typing...</div>
+                `;
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                return typingDiv;
+            }
+            
+            function removeTypingIndicator(indicator) {
+                if (indicator && indicator.parentNode) {
+                    indicator.parentNode.removeChild(indicator);
+                }
+            }
+            
+            // Function to add a new message
+            function addMessage(text, isUser = false, emotion = null) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user' : 'bot');
+                
+                if (emotion && !isUser) {
+                    messageDiv.classList.add(`emotion-${emotion}`);
+                }
+                
+                const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                // Process markdown-like formatting
+                let formattedText = text
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/\n/g, '<br>');
+                
+                messageDiv.innerHTML = `
+                    ${formattedText}
+                    <div class="message-time">${time}</div>
+                `;
+                
+                chatMessages.appendChild(messageDiv);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Clear input if it's a user message
+                if (isUser) {
+                    chatInput.value = '';
+                }
+                
+                return messageDiv;
+            }
+            
+            // Function to generate empathetic responses when Rasa is unavailable
+            function generateEmpathicResponse(userMessage) {
+                // Common mental health concerns and supportive responses
+                const responsePatterns = [
+                    {
+                        keywords: ['sad', 'unhappy', 'depressed', 'down', 'blue', 'miserable'],
+                        responses: [
+                            "I'm sorry to hear you're feeling down. It's okay to feel sad sometimes, and your feelings are valid. Would you like to talk more about what's making you feel this way?",
+                            "I understand that feeling sad can be overwhelming. Remember that you're not alone in this. Would it help to share more about what's happening?",
+                            "When we feel sad, it can be hard to see beyond those feelings. I'm here to listen without judgment. What's been on your mind lately?"
+                        ]
+                    },
+                    {
+                        keywords: ['anxious', 'worried', 'nervous', 'stress', 'stressed', 'panic', 'fear'],
+                        responses: [
+                            "Anxiety can be really challenging to deal with. Taking slow, deep breaths might help in the moment. Would you like to tell me more about what's causing your anxiety?",
+                            "It sounds like you're experiencing some anxiety. That's a natural response, though it can be uncomfortable. Is there something specific that's triggering these feelings?",
+                            "When anxiety takes hold, it can be hard to think clearly. You're doing the right thing by reaching out. Can you share what's making you feel this way?"
+                        ]
+                    },
+                    {
+                        keywords: ['angry', 'mad', 'frustrated', 'annoyed', 'irritated'],
+                        responses: [
+                            "It sounds like you're feeling frustrated. Those feelings are completely valid. Would it help to talk about what's causing this anger?",
+                            "Anger is a natural emotion that we all experience. Sometimes expressing it in a safe way can help. What's been triggering these feelings for you?",
+                            "When we feel angry, it's often because something important to us is being threatened or challenged. I'm here to listen if you want to share more."
+                        ]
+                    },
+                    {
+                        keywords: ['tired', 'exhausted', 'fatigue', 'sleep', 'insomnia', 'rest'],
+                        responses: [
+                            "Being tired can affect our mental health significantly. Have you been having trouble sleeping lately? Would you like to talk about what might be keeping you awake?",
+                            "Fatigue can make everything feel more difficult. Your body might be telling you something important. How long have you been feeling this way?",
+                            "Sleep problems can be both a symptom and a cause of stress. I'm here to listen if you want to share more about what you're experiencing."
+                        ]
+                    },
+                    {
+                        keywords: ['lonely', 'alone', 'isolated', 'no friends', 'no one'],
+                        responses: [
+                            "Feeling lonely can be really painful. Even when we're surrounded by people, we can still feel isolated. Would you like to talk more about these feelings?",
+                            "I'm sorry you're feeling alone. Connection is such an important human need. Have you felt this way for a while?",
+                            "Loneliness is something many people experience, though we don't always talk about it. You're not alone in feeling this way. Would you like to share more about your situation?"
+                        ]
+                    },
+                    {
+                        keywords: ['overwhelmed', 'too much', 'can\'t cope', 'struggling'],
+                        responses: [
+                            "It sounds like you're feeling overwhelmed right now. That's completely understandable. Sometimes breaking things down into smaller steps can help. Would you like to talk about what's on your plate?",
+                            "When everything feels too much, it's important to be gentle with yourself. You don't have to handle everything at once. What's feeling most pressing for you right now?",
+                            "Feeling overwhelmed is a sign that you might need some support or a different approach. You're doing the right thing by talking about it. Can you tell me more about what you're dealing with?"
+                        ]
+                    },
+                    {
+                        keywords: ['help', 'support', 'need advice', 'guidance'],
+                        responses: [
+                            "I'm here to support you. To help you best, could you share a bit more about what you're going through?",
+                            "I'm glad you're reaching out for support. That takes courage. What kind of help are you looking for today?",
+                            "I'm here to listen and offer support. Could you tell me more about your situation so I can better understand how to help?"
+                        ]
+                    },
+                    {
+                        keywords: ['hello', 'hi', 'hey', 'greetings'],
+                        responses: [
+                            "Hello! I'm here to support you with whatever you'd like to talk about today. How are you feeling?",
+                            "Hi there! I'm your mental health companion. How are you doing today? Is there something specific on your mind?",
+                            "Hello! It's good to connect with you. How are you feeling today? I'm here to listen and support you."
+                        ]
+                    }
+                ];
+                
+                // Default responses if no keywords match
+                const defaultResponses = [
+                    "Thank you for sharing that with me. Could you tell me more about how you're feeling?",
+                    "I'm here to listen and support you. Would you like to elaborate on what you're experiencing?",
+                    "I appreciate you reaching out. To better understand your situation, could you share a bit more about what's on your mind?",
+                    "I'm here for you. Sometimes talking through our thoughts can help us process them better. Would you like to tell me more?",
+                    "Your feelings are important. I'd like to understand more about what you're going through so I can offer better support."
+                ];
+                
+                // Convert user message to lowercase for matching
+                const lowerMessage = userMessage.toLowerCase();
+                
+                // Check for keyword matches
+                for (const pattern of responsePatterns) {
+                    for (const keyword of pattern.keywords) {
+                        if (lowerMessage.includes(keyword)) {
+                            // Return a random response from the matching pattern
+                            return pattern.responses[Math.floor(Math.random() * pattern.responses.length)];
+                        }
+                    }
+                }
+                
+                // If no keywords match, return a default response
+                return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+            }
+            
+            // Send message to Rasa server
+            async function sendToRasa(message) {
+                try {
+                    const typingIndicator = showTypingIndicator();
+                    
+                    const response = await fetch(RASA_SERVER_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ sender: 'user', message: message }),
+                    });
+                    
+                    const data = await response.json();
+                    removeTypingIndicator(typingIndicator);
+                    
+                    if (data && data.length > 0) {
+                        // Process each response from Rasa
+                        data.forEach(msg => {
+                            if (msg.text) {
+                                // Check if there's emotion data in the response
+                                let emotion = 'neutral';
+                                if (msg.custom && msg.custom.emotion) {
+                                    emotion = msg.custom.emotion;
+                                }
+                                
+                                addMessage(msg.text, false, emotion);
+                            }
+                            
+                            // Handle images if any
+                            if (msg.image) {
+                                addImageMessage(msg.image);
+                            }
+                        });
+                    } else {
+                        // Use our empathetic response generator when no data from Rasa
+                        const empathicResponse = generateEmpathicResponse(message);
+                        addMessage(empathicResponse, false, 'neutral');
+                    }
+                } catch (error) {
+                    console.error('Error communicating with Rasa:', error);
+                    // Use our empathetic response generator for connection errors
+                    const empathicResponse = generateEmpathicResponse(message);
+                    addMessage(empathicResponse, false, 'neutral');
+                }
+            }
+            
+            // Add image message
+            function addImageMessage(imageUrl) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', 'bot', 'image-message');
+                
+                const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                messageDiv.innerHTML = `
+                    <img src="${imageUrl}" alt="Bot shared image" class="message-image">
+                    <div class="message-time">${time}</div>
+                `;
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Send message on button click
+            sendButton.addEventListener('click', () => {
+                const message = chatInput.value.trim();
+                if (message) {
+                    addMessage(message, true);
+                    sendToRasa(message);
+                }
+            });
+            
+            // Send message on Enter key
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendButton.click();
+                }
+            });
+            
+            // Add click event to suggestions
+            suggestions.forEach(suggestion => {
+                suggestion.addEventListener('click', () => {
+                    const message = suggestion.textContent;
+                    addMessage(message, true);
+                    sendToRasa(message);
+                });
+            });
+            
+            // Auto-scroll to bottom on page load
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Focus on input field
+            chatInput.focus();
+            
+            // Add CSS for typing indicator and emotion styling
+            const styleElement = document.createElement('style');
+            styleElement.textContent = `
+                .typing-indicator {
+                    padding: 15px 20px;
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                }
+                
+                .typing-indicator .dot {
+                    width: 8px;
+                    height: 8px;
+                    background: var(--text-medium);
+                    border-radius: 50%;
+                    animation: typingAnimation 1.5s infinite ease-in-out;
+                }
+                
+                .typing-indicator .dot:nth-child(1) { animation-delay: 0s; }
+                .typing-indicator .dot:nth-child(2) { animation-delay: 0.3s; }
+                .typing-indicator .dot:nth-child(3) { animation-delay: 0.6s; }
+                
+                @keyframes typingAnimation {
+                    0%, 100% { transform: translateY(0); opacity: 0.5; }
+                    50% { transform: translateY(-5px); opacity: 1; }
+                }
+                
+                .message-image {
+                    max-width: 100%;
+                    border-radius: 8px;
+                    margin-top: 5px;
+                }
+                
+                /* Emotion-specific styling */
+             .message.emotion-sadness { 
+                 border-left-color: var(--primary-dark); 
+                 background: linear-gradient(to right, rgba(var(--primary-dark-rgb), 0.1), var(--bg-dark));
+             }
+             .message.emotion-anger { 
+                 border-left-color: var(--danger); 
+                 background: linear-gradient(to right, rgba(var(--danger-rgb), 0.1), var(--bg-dark));
+             }
+             .message.emotion-fear { 
+                 border-left-color: var(--warning); 
+                 background: linear-gradient(to right, rgba(var(--warning-rgb), 0.1), var(--bg-dark));
+             }
+             .message.emotion-joy { 
+                 border-left-color: var(--success); 
+                 background: linear-gradient(to right, rgba(var(--success-rgb), 0.1), var(--bg-dark));
+             }
+             .message.emotion-neutral { 
+                 border-left-color: var(--primary); 
+                 background: linear-gradient(to right, rgba(var(--primary-rgb), 0.1), var(--bg-dark));
+             }
+            `;
+            document.head.appendChild(styleElement);
+        });
+    </script>
+</body>
+</html>

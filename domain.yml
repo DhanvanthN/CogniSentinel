@@ -1,0 +1,178 @@
+version: "3.1"
+intents:
+  - greet
+  - goodbye
+  - sad
+  - happy
+  - angry
+  - anxious
+  - neutral
+  - affirm
+  - deny
+  - mood_explain
+  - bullied
+  - stressed
+  - lonely
+  - gratitude
+  - need_help
+  - sleep_problem
+  - motivation
+  - overwhelmed
+  - panic
+  - self_esteem
+  - relationship
+  - family
+  - work
+  - school
+
+responses:
+  utter_greet:
+    - text: "Hello! How are you feeling today?"
+    - text: "Hi there! How can I support you today?"
+    - text: "Welcome! What's on your mind?"
+
+  utter_goodbye:
+    - text: "Goodbye! Take care."
+    - text: "See you soon. Remember, I'm always here for you."
+    - text: "Wishing you a peaceful day ahead!"
+
+  utter_sad:
+    - text: "I'm sorry you're feeling sad. Would you like to talk about it?"
+    - text: "Sadness can be tough. I'm here to listen if you want to share more."
+    - text: "It's okay to feel sad sometimes. What happened?"
+
+  utter_happy:
+    - text: "That's wonderful! What's making you happy today?"
+    - text: "I'm glad to hear you're feeling good! Want to share more?"
+    - text: "Joy is worth celebrating! Tell me about it."
+
+  utter_angry:
+    - text: "It's okay to feel angry sometimes. Want to share more?"
+    - text: "Anger is a valid emotion. What triggered it?"
+    - text: "I'm here for you. Would talking about it help?"
+
+  utter_anxious:
+    - text: "Anxiety can be tough. Would you like some calming tips?"
+    - text: "I'm sorry you're feeling anxious. Want to try a breathing exercise?"
+    - text: "Would you like to talk about what's making you anxious?"
+
+  utter_neutral:
+    - text: "I'm here for you. Tell me more about how you're feeling."
+    - text: "Thanks for sharing. Is there anything you'd like to talk about?"
+    - text: "I'm listening. What's on your mind?"
+
+  utter_affirm:
+    - text: "Great! Is there anything else you'd like to share?"
+    - text: "I'm glad to hear that. Anything else?"
+    - text: "Awesome! How else can I help?"
+
+  utter_deny:
+    - text: "Okay, let me know if you want to talk."
+    - text: "No problem. I'm here whenever you need me."
+    - text: "Alright. Take your time."
+
+  utter_mood_explain:
+    - text: "Thank you for sharing. Would you like to try a mental health exercise?"
+    - text: "I appreciate your honesty. Want to try a grounding technique?"
+    - text: "Would you like some tips or resources?"
+
+  utter_bullied:
+    - text: "I'm really sorry you're experiencing bullying. You don't deserve that."
+    - text: "Bullying can be very painful. Would you like to talk about what happened?"
+    - text: "You're not alone. I can share some resources or coping strategies if you'd like."
+
+  utter_stressed:
+    - text: "Stress can be overwhelming. Want to try a relaxation exercise?"
+    - text: "I'm here for you. Would talking about your stress help?"
+    - text: "Would you like some tips for managing stress?"
+
+  utter_lonely:
+    - text: "Loneliness can be tough. I'm here to listen."
+    - text: "Feeling alone is hard. Want to talk about it?"
+    - text: "Would you like some ideas for connecting with others?"
+
+  utter_gratitude:
+    - text: "Gratitude is powerful! What are you thankful for today?"
+    - text: "That's wonderful. Practicing gratitude can boost your mood."
+    - text: "Would you like to share more about what you're grateful for?"
+
+  utter_need_help:
+    - text: "I'm here to help. Can you tell me more about what you need?"
+    - text: "Support is important. What kind of help are you looking for?"
+    - text: "Let me know how I can assist you."
+
+  utter_sleep_problem:
+    - text: "Sleep issues can affect your mood. Want some tips for better sleep?"
+    - text: "I'm sorry you're having trouble sleeping. Would you like to talk about it?"
+    - text: "Would you like to try a relaxation exercise before bed?"
+
+  utter_motivation:
+    - text: "Motivation can be hard to find. Want some strategies?"
+    - text: "I'm here to encourage you! What's your goal?"
+    - text: "Would you like some motivational tips?"
+
+  utter_overwhelmed:
+    - text: "Feeling overwhelmed is tough. Want to break things down together?"
+    - text: "Let's take it one step at a time. What's the biggest challenge right now?"
+    - text: "Would you like some tips for managing overwhelm?"
+
+  utter_panic:
+    - text: "Panic can feel scary. Want to try a calming exercise?"
+    - text: "I'm here for you. Let's breathe together."
+    - text: "Would you like to talk about what's causing your panic?"
+
+  utter_self_esteem:
+    - text: "Self-esteem matters. Want to talk about what makes you feel this way?"
+    - text: "You're valuable and worthy. Would you like some affirmations?"
+    - text: "Let's explore your strengths together."
+
+  utter_relationship:
+    - text: "Relationships can be complicated. Want to share more?"
+    - text: "I'm here to listen. What's happening in your relationship?"
+    - text: "Would you like some advice or just to vent?"
+
+  utter_family:
+    - text: "Family issues can be challenging. Want to talk about it?"
+    - text: "I'm here for you. What's going on with your family?"
+    - text: "Would you like some support or resources?"
+
+  utter_work:
+    - text: "Work stress is common. Want to talk about your job?"
+    - text: "I'm here to listen. What's happening at work?"
+    - text: "Would you like some tips for work-life balance?"
+
+  utter_school:
+    - text: "School can be stressful. Want to talk about your studies?"
+    - text: "I'm here for you. What's going on at school?"
+    - text: "Would you like some study tips or support?"
+
+actions:
+  - utter_greet
+  - utter_goodbye
+  - utter_sad
+  - utter_happy
+  - utter_angry
+  - utter_anxious
+  - utter_neutral
+  - utter_affirm
+  - utter_deny
+  - utter_mood_explain
+  - utter_bullied
+  - utter_stressed
+  - utter_lonely
+  - utter_gratitude
+  - utter_need_help
+  - utter_sleep_problem
+  - utter_motivation
+  - utter_overwhelmed
+  - utter_panic
+  - utter_self_esteem
+  - utter_relationship
+  - utter_family
+  - utter_work
+  - utter_school
+  - action_fallback_api
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

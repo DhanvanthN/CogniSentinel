@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CogniSentinel - Mental Health Support Chatbot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        header {
+            background: linear-gradient(to right, #5a67d8, #9f7aea);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo i {
+            margin-right: 12px;
+            font-size: 32px;
+        }
+        
+        .tagline {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+        }
+        
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+            color: #5a67d8;
+            display: flex;
+            align-items: center;
+        }
+        
+        .chat-header i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #fafafa;
+        }
+        
+        .message {
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .bot-message {
+            background: #e9e9ff;
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+            color: #444;
+        }
+        
+        .user-message {
+            background: #5a67d8;
+            color: white;
+            border-bottom-right-radius: 5px;
+            align-self: flex-end;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            font-size: 15px;
+        }
+        
+        .chat-input button {
+            background: #5a67d8;
+            color: white;
+            border: none;
+            width: 50px;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .chat-input button:hover {
+            background: #4c51bf;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #718096;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+        
+        .disclaimer {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .chat-container {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                CogniSentinel
+            </div>
+            <div class="tagline">Your AI-powered mental health companion</div>
+        </header>
+        
+        <div class="main-content">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <i class="fas fa-comments"></i>
+                    Chat with CogniSentinel
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot-message">
+                        Hi there! I'm CogniSentinel, your mental health support companion. How can I help you today?
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="user-input" placeholder="Type your message here...">
+                    <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="disclaimer">
+                <p><strong>Important:</strong> CogniSentinel is an AI-powered chatbot designed to provide emotional support and mental health information. It is not a substitute for professional medical advice, diagnosis, or treatment. If you are in crisis, please contact your local emergency services or mental health crisis line.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendButton = document.getElementById('send-button');
+            
+            // Sample bot responses for demonstration
+            const botResponses = [
+                "I'm here to listen. How are you feeling today?",
+                "Thank you for sharing. Would you like to talk more about it?",
+                "I'm here to support you. What would you like to discuss?",
+                "It takes courage to reach out. How can I assist you?",
+                "Would you like to try a relaxation exercise or discuss coping strategies?",
+                "You're not alone. Many people experience similar feelings.",
+                "Let's explore your thoughts together. What is on your mind?",
+                "Is there anything specific you'd like help with today?",
+                "I'm here for you. Please tell me more.",
+                "Would you like some tips for managing stress or anxiety?"
+            ];
+            
+            // Function to add a message to the chat
+            function addMessage(text, isUser) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+                messageDiv.textContent = text;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to get a random bot response
+            function getBotResponse() {
+                const randomIndex = Math.floor(Math.random() * botResponses.length);
+                return botResponses[randomIndex];
+            }
+            
+            // Handle send button click
+            sendButton.addEventListener('click', function() {
+                const message = userInput.value.trim();
+                if (message) {
+                    addMessage(message, true);
+                    userInput.value = '';
+                    
+                    // Bot response after a short delay
+                    setTimeout(() => {
+                        addMessage(getBotResponse(), false);
+                    }, 1000);
+                }
+            });
+            
+            // Handle Enter key press
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendButton.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

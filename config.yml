@@ -1,0 +1,44 @@
+version: "3.1"
+
+# Assistant ID for Rasa 3.1
+assistant_id: "cognisentinel_mental_health_bot"
+
+# NLU Pipeline optimized for mental health conversations and emotion detection
+language: "en"
+pipeline:
+  - name: WhitespaceTokenizer
+  - name: RegexFeaturizer
+  - name: LexicalSyntacticFeaturizer
+  - name: CountVectorsFeaturizer
+  - name: CountVectorsFeaturizer
+    analyzer: char_wb
+    min_ngram: 1
+    max_ngram: 4
+  - name: DIETClassifier
+    epochs: 150  # Increased for better emotion recognition
+    constrain_similarities: true
+    entity_recognition: true
+    intent_classification: true
+  - name: EntitySynonymMapper
+  - name: ResponseSelector
+    epochs: 150  # Increased for better response selection
+    constrain_similarities: true
+    retrieval_intent: emotion_faq
+  - name: FallbackClassifier
+    threshold: 0.4  # Slightly higher threshold for more fallbacks to custom actions
+    ambiguity_threshold: 0.1
+
+# Core Policies optimized for mental health conversations
+policies:
+  - name: MemoizationPolicy
+    max_history: 7  # Increased to remember longer conversation context
+  - name: TEDPolicy
+    max_history: 7  # Increased to remember longer conversation context
+    epochs: 150     # Increased for better learning
+    constrain_similarities: true
+    model_confidence: softmax
+  - name: RulePolicy
+    enable_fallback_prediction: true
+    core_fallback_action_name: "action_fallback_api"
+    core_fallback_threshold: 0.4
+    enable_prediction_logging: true

@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CogniSentinel - Mental Health Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7F5AF0;
+            --primary-light: #9D7FFF;
+            --secondary: #2CB67D;
+            --accent: #FF8E3C;
+            --background: #16161A;
+            --surface: #242629;
+            --text-primary: #FFFFFE;
+            --text-secondary: #94A1B2;
+            --text-tertiary: #72757E;
+            --error: #EF4565;
+            --success: #2CB67D;
+            --warning: #FFB347;
+            --info: #3B82F6;
+            --joy: #FFB347;
+            --sadness: #7F5AF0;
+            --anger: #EF4565;
+            --fear: #7F5AF0;
+            --neutral: #2CB67D;
+            --mood-great: #FFB347;
+            --mood-good: #2CB67D;
+            --mood-okay: #94A1B2;
+            --mood-bad: #7F5AF0;
+            --mood-awful: #EF4565;
+            --radius-md: 0.5rem;
+            --radius-lg: 1rem;
+            --radius-full: 9999px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #16161A 0%, #7F5AF0 50%, #2CB67D 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            grid-template-rows: 70px 1fr;
+            height: 100vh;
+            gap: 1rem;
+            padding: 1rem;
+        }
+        @media (max-width: 900px) {
+            .app-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 70px 1fr 350px;
+                height: auto;
+            }
+            aside.sidebar {
+                grid-row: 3;
+                grid-column: 1;
+                max-width: 100vw;
+            }
+        }
+        @media (max-width: 600px) {
+            .app-container {
+                padding: 0.5rem;
+            }
+            .header {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+            .logo-text {
+                font-size: 1.2rem;
+            }
+        }
+        .header {
+            grid-column: 1 / -1;
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.15);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        .brain-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #7F5AF0 0%, #2CB67D 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(127, 90, 240, 0.3);
+        }
+        .brain-logo svg {
+            width: 28px;
+            height: 28px;
+            display: block;
+        }
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #7F5AF0, #2CB67D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .server-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            background-color: rgba(44, 182, 125, 0.1);
+        }
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #EF4565;
+            box-shadow: 0 0 5px #EF4565;
+        }
+        .server-status.connected .status-indicator {
+            background-color: #2CB67D;
+            box-shadow: 0 0 5px #2CB67D;
+        }
+        .server-status.connected .status-text {
+            color: #2CB67D;
+        }
+        .server-status.disconnected .status-indicator {
+            background-color: #EF4565;
+            box-shadow: 0 0 5px #EF4565;
+        }
+        .server-status.disconnected .status-text {
+            color: #EF4565;
+        }
+        /* Chat Container */
+        .chat-container {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.15);
+        }
+        .chat-header {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--background);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .chat-header h2 {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        .message {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .message.user {
+            align-self: flex-end;
+        }
+        .message-content {
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            background: var(--background);
+            word-break: break-word;
+        }
+        .message.user .message-content {
+            background: var(--primary);
+            color: white;
+        }
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+        .message.joy .message-content { border-left: 4px solid var(--joy); }
+        .message.sadness .message-content { border-left: 4px solid var(--sadness); }
+        .message.anger .message-content { border-left: 4px solid var(--anger); }
+        .message.fear .message-content { border-left: 4px solid var(--fear); }
+        .message.neutral .message-content { border-left: 4px solid var(--neutral); }
+        .chat-input-container {
+            padding: 1rem;
+            border-top: 1px solid var(--background);
+        }
+        .chat-input-wrapper {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid var(--background);
+            border-radius: var(--radius-md);
+            resize: none;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+        .chat-input:focus {
+            border-color: var(--primary-light);
+        }
+        .send-button {
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .send-button:hover {
+            background: var(--primary-light);
+        }
+        /* Sidebar */
+        .sidebar {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.15);
+            max-width: 350px;
+        }
+        .sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .section-title {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        /* Emotion Stats */
+        .emotion-stat {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .emotion-label {
+            min-width: 80px;
+            color: var(--text-secondary);
+        }
+        .emotion-progress-container {
+            flex: 1;
+            height: 8px;
+            background: var(--background);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+        .emotion-progress {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .emotion-progress.joy { background: var(--joy); }
+        .emotion-progress.sadness { background: var(--sadness); }
+        .emotion-progress.anger { background: var(--anger); }
+        .emotion-progress.fear { background: var(--fear); }
+        .emotion-progress.neutral { background: var(--neutral); }
+        .emotion-value {
+            min-width: 48px;
+            text-align: right;
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+        }
+        /* Mood Tracker */
+        .mood-options {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .mood-option {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: var(--radius-md);
+            background: var(--background);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+        .mood-option:hover {
+            background: var(--primary-light);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .mood-option.selected {
+            background: var(--primary-light);
+            color: white;
+        }
+        .mood-chart {
+            background: var(--background);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            min-height: 120px;
+        }
+        .mood-chart-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .mood-history-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+            background: var(--surface);
+        }
+        .mood-date { font-size: 0.85rem; color: var(--text-tertiary); }
+        .mood-icon { font-size: 1.1rem; }
+        .mood-name { font-weight: 500; }
+        /* Topics and Exercises */
+        .topic-buttons,
+        .exercise-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .topic-button,
+        .exercise-button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--radius-full);
+            background: var(--background);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+        .topic-button:hover,
+        .exercise-button:hover {
+            background: var(--primary-light);
+            color: white;
+            transform: translateY(-2px);
+        }
+        /* Resources */
+        .resources-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .resource-link {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.2s;
+            font-size: 0.875rem;
+        }
+        .resource-link:hover {
+            color: var(--primary-light);
+            text-decoration: underline;
+        }
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 0.5rem 1rem;
+            background: var(--background);
+            border-radius: var(--radius-md);
+            width: fit-content;
+            margin-bottom: 1rem;
+        }
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: var(--radius-full);
+            background: var(--text-tertiary);
+            animation: typing 1s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">
+                <div class="brain-logo">
+                    <!-- Stylized SVG Brain Icon -->
+                    <svg viewBox="0 0 64 64" fill="none">
+                        <path d="M32 8c-7 0-13 6-13 13v22c0 7 6 13 13 13s13-6 13-13V21c0-7-6-13-13-13z" fill="#7F5AF0"/>
+                        <path d="M32 8c-7 0-13 6-13 13v22c0 7 6 13 13 13s13-6 13-13V21c0-7-6-13-13-13z" fill="url(#brainGradient)"/>
+                        <path d="M25 21c0-3.9 3.1-7 7-7s7 3.1 7 7v22c0 3.9-3.1 7-7 7s-7-3.1-7-7V21z" fill="#2CB67D" fill-opacity="0.7"/>
+                        <defs>
+                            <linearGradient id="brainGradient" x1="19" y1="8" x2="45" y2="56" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#7F5AF0"/>
+                                <stop offset="1" stop-color="#2CB67D"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">CogniSentinel</span>
+            </div>
+            <div id="server-status" class="server-status disconnected" title="Server connection status">
+                <span class="status-indicator"></span>
+                <span class="status-text">Disconnected</span>
+            </div>
+        </header>
+        <main class="chat-container">
+            <div class="chat-header">
+                <h2>Mental Health Companion</h2>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <textarea class="chat-input" id="chatInput" placeholder="Type your message here..." rows="1"></textarea>
+                    <button class="send-button" id="sendButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </main>
+        <aside class="sidebar">
+            <section class="sidebar-section">
+                <h3 class="section-title">Emotion Analysis</h3>
+                <div class="emotion-stat">
+                    <span class="emotion-label">Joy</span>
+                    <div class="emotion-progress-container">
+                        <div class="emotion-progress joy" style="width: 20%"></div>
+                    </div>
+                    <span class="emotion-value">20%</span>
+                </div>
+                <div class="emotion-stat">
+                    <span class="emotion-label">Sadness</span>
+                    <div class="emotion-progress-container">
+                        <div class="emotion-progress sadness" style="width: 15%"></div>
+                    </div>
+                    <span class="emotion-value">15%</span>
+                </div>
+                <div class="emotion-stat">
+                    <span class="emotion-label">Anger</span>
+                    <div class="emotion-progress-container">
+                        <div class="emotion-progress anger" style="width: 10%"></div>
+                    </div>
+                    <span class="emotion-value">10%</span>
+                </div>
+                <div class="emotion-stat">
+                    <span class="emotion-label">Fear</span>
+                    <div class="emotion-progress-container">
+                        <div class="emotion-progress fear" style="width: 25%"></div>
+                    </div>
+                    <span class="emotion-value">25%</span>
+                </div>
+                <div class="emotion-stat">
+                    <span class="emotion-label">Neutral</span>
+                    <div class="emotion-progress-container">
+                        <div class="emotion-progress neutral" style="width: 30%"></div>
+                    </div>
+                    <span class="emotion-value">30%</span>
+                </div>
+            </section>
+            <section class="sidebar-section">
+                <h3 class="section-title">Daily Mood Tracker</h3>
+                <div class="mood-options">
+                    <button class="mood-option" data-mood="great">Great</button>
+                    <button class="mood-option" data-mood="good">Good</button>
+                    <button class="mood-option" data-mood="okay">Okay</button>
+                    <button class="mood-option" data-mood="bad">Bad</button>
+                    <button class="mood-option" data-mood="awful">Awful</button>
+                </div>
+                <div class="mood-chart" id="moodChart">
+                    <div class="mood-chart-content"></div>
+                </div>
+            </section>
+            <section class="sidebar-section">
+                <h3 class="section-title">Suggested Topics</h3>
+                <div class="topic-buttons">
+                    <button class="topic-button" data-topic="I'm feeling anxious">Anxiety</button>
+                    <button class="topic-button" data-topic="I'm feeling sad">Depression</button>
+                    <button class="topic-button" data-topic="I'm having trouble sleeping">Sleep</button>
+                    <button class="topic-button" data-topic="I'm feeling stressed">Stress</button>
+                    <button class="topic-button" data-topic="I need motivation">Motivation</button>
+                </div>
+            </section>
+            <section class="sidebar-section">
+                <h3 class="section-title">Mental Health Exercises</h3>
+                <div class="exercise-buttons">
+                    <button class="exercise-button" data-exercise="mindful-breathing">Mindful Breathing</button>
+                    <button class="exercise-button" data-exercise="grounding">Grounding</button>
+                    <button class="exercise-button" data-exercise="gratitude">Gratitude</button>
+                </div>
+            </section>
+            <section class="sidebar-section">
+                <h3 class="section-title">Helpful Resources</h3>
+                <div class="resources-list">
+                    <a href="#" class="resource-link">Crisis Helpline</a>
+                    <a href="#" class="resource-link">Mental Health Articles</a>
+                    <a href="#" class="resource-link">Self-Care Tips</a>
+                    <a href="#" class="resource-link">Find a Therapist</a>
+                </div>
+            </section>
+        </aside>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+            const topicButtons = document.querySelectorAll('.topic-button');
+            const moodOptions = document.querySelectorAll('.mood-option');
+            const moodChart = document.getElementById('moodChart');
+            // Add message to chat
+            function addMessage(text, sender, emotion = 'neutral') {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender} ${emotion}`;
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.innerHTML = `<p>${text}</p>`;
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'message-time';
+                const now = new Date();
+                timeDiv.textContent = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+                messageDiv.appendChild(contentDiv);
+                messageDiv.appendChild(timeDiv);
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            // Typing indicator
+            function showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'typing-indicator';
+                typingDiv.id = 'typingIndicator';
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'typing-dot';
+                    typingDiv.appendChild(dot);
+                }
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            function removeTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) typingIndicator.remove();
+            }
+            // Empathic response generator
+            function generateEmpathicResponse(userMessage) {
+                const responsePatterns = [
+                    {
+                        keywords: ['sad', 'unhappy', 'depressed', 'down', 'blue', 'miserable'],
+                        responses: [
+                            "I'm sorry to hear you're feeling down. It's okay to feel sad sometimes, and your feelings are valid. Would you like to talk more about what's making you feel this way?",
+                            "I understand that feeling sad can be overwhelming. Remember that you're not alone in this. Would it help to share more about what's happening?",
+                            "When we feel sad, it can be hard to see beyond those feelings. I'm here to listen without judgment. What's been on your mind lately?"
+                        ],
+                        emotion: 'sadness'
+                    },
+                    {
+                        keywords: ['anxious', 'worried', 'nervous', 'stress', 'stressed', 'panic', 'fear'],
+                        responses: [
+                            "Anxiety can be really challenging to deal with. Taking slow, deep breaths might help in the moment. Would you like to tell me more about what's causing your anxiety?",
+                            "It sounds like you're experiencing some anxiety. That's a natural response, though it can be uncomfortable. Is there something specific that's triggering these feelings?",
+                            "When anxiety takes hold, it can be hard to think clearly. You're doing the right thing by reaching out. Can you share what's making you feel this way?"
+                        ],
+                        emotion: 'fear'
+                    },
+                    {
+                        keywords: ['angry', 'mad', 'frustrated', 'annoyed', 'irritated'],
+                        responses: [
+                            "It sounds like you're feeling frustrated. Those feelings are completely valid. Would it help to talk about what's causing this anger?",
+                            "Anger is a natural emotion that we all experience. Sometimes expressing it in a safe way can help. What's been triggering these feelings for you?",
+                            "When we feel angry, it's often because something important to us is being threatened or challenged. I'm here to listen if you want to share more."
+                        ],
+                        emotion: 'anger'
+                    },
+                    {
+                        keywords: ['tired', 'exhausted', 'fatigue', 'sleep', 'insomnia', 'rest'],
+                        responses: [
+                            "Being tired can affect our mental health significantly. Have you been having trouble sleeping lately? Would you like to talk about what might be keeping you awake?",
+                            "Fatigue can make everything feel more difficult. Your body might be telling you something important. How long have you been feeling this way?",
+                            "Sleep problems can be both a symptom and a cause of stress. I'm here to listen if you want to share more about what you're experiencing."
+                        ],
+                        emotion: 'neutral'
+                    },
+                    {
+                        keywords: ['lonely', 'alone', 'isolated', 'no friends', 'no one'],
+                        responses: [
+                            "Feeling lonely can be really painful. Even when we're surrounded by people, we can still feel isolated. Would you like to talk more about these feelings?",
+                            "I'm sorry you're feeling alone. Connection is such an important human need. Have you felt this way for a while?",
+                            "Loneliness is something many people experience, though we don't always talk about it. You're not alone in feeling this way. Would you like to share more about your situation?"
+                        ],
+                        emotion: 'sadness'
+                    },
+                    {
+                        keywords: ['overwhelmed', 'too much', 'can\'t cope', 'struggling'],
+                        responses: [
+                            "It sounds like you're feeling overwhelmed right now. That's completely understandable. Sometimes breaking things down into smaller steps can help. Would you like to talk about what's on your plate?",
+                            "When everything feels too much, it's important to be gentle with yourself. You don't have to handle everything at once. What's feeling most pressing for you right now?",
+                            "Feeling overwhelmed is a sign that you might need some support or a different approach. You're doing the right thing by talking about it. Can you tell me more about what you're dealing with?"
+                        ],
+                        emotion: 'fear'
+                    },
+                    {
+                        keywords: ['help', 'support', 'need advice', 'guidance'],
+                        responses: [
+                            "I'm here to support you. To help you best, could you share a bit more about what you're going through?",
+                            "I'm glad you're reaching out for support. That takes courage. What kind of help are you looking for today?",
+                            "I'm here to listen and offer support. Could you tell me more about your situation so I can better understand how to help?"
+                        ],
+                        emotion: 'neutral'
+                    },
+                    {
+                        keywords: ['happy', 'good', 'great', 'wonderful', 'joy', 'excited'],
+                        responses: [
+                            "It's wonderful to hear you're feeling good! Positive emotions are worth celebrating. What's contributing to your happiness today?",
+                            "I'm glad you're feeling well! Sharing positive experiences can help us appreciate them even more. Would you like to tell me more about what's going well?",
+                            "That's great to hear! Recognizing and savoring positive emotions is an important part of mental wellness. What's bringing you joy right now?"
+                        ],
+                        emotion: 'joy'
+                    },
+                    {
+                        keywords: ['hello', 'hi', 'hey', 'greetings'],
+                        responses: [
+                            "Hello! I'm here to support you with whatever you'd like to talk about today. How are you feeling?",
+                            "Hi there! I'm your mental health companion. How are you doing today? Is there something specific on your mind?",
+                            "Hello! It's good to connect with you. How are you feeling today? I'm here to listen and support you."
+                        ],
+                        emotion: 'neutral'
+                    }
+                ];
+                const defaultResponses = [
+                    { text: "Thank you for sharing that with me. Could you tell me more about how you're feeling?", emotion: 'neutral' },
+                    { text: "I'm here to listen and support you. Would you like to elaborate on what you're experiencing?", emotion: 'neutral' },
+                    { text: "I appreciate you reaching out. To better understand your situation, could you share a bit more about what's on your mind?", emotion: 'neutral' },
+                    { text: "Your feelings are important. I'd like to understand more about what you're going through so I can offer better support.", emotion: 'neutral' }
+                ];
+                const lowerMessage = userMessage.toLowerCase();
+                for (const pattern of responsePatterns) {
+                    for (const keyword of pattern.keywords) {
+                        if (lowerMessage.includes(keyword)) {
+                            const randomResponse = pattern.responses[Math.floor(Math.random() * pattern.responses.length)];
+                            return { text: randomResponse, emotion: pattern.emotion };
+                        }
+                    }
+                }
+                return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+            }
+            // Send message
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (message === '') return;
+                addMessage(message, 'user');
+                chatInput.value = '';
+                showTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    const response = generateEmpathicResponse(message);
+                    addMessage(response.text, 'bot', response.emotion);
+                    updateEmotionStats(response.emotion);
+                }, 1500);
+            }
+            // Update emotion stats
+            function updateEmotionStats(emotion) {
+                const emotions = ['joy', 'sadness', 'anger', 'fear', 'neutral'];
+                const currentValues = {};
+                emotions.forEach(e => {
+                    const progressBar = document.querySelector(`.emotion-progress.${e}`);
+                    const valueElement = progressBar.parentElement.nextElementSibling;
+                    currentValues[e] = parseInt(valueElement.textContent);
+                });
+                if (emotions.includes(emotion)) {
+                    currentValues[emotion] = Math.min(100, currentValues[emotion] + 5);
+                    emotions.forEach(e => {
+                        if (e !== emotion) {
+                            currentValues[e] = Math.max(0, currentValues[e] - 1);
+                        }
+                    });
+                    emotions.forEach(e => {
+                        const progressBar = document.querySelector(`.emotion-progress.${e}`);
+                        const valueElement = progressBar.parentElement.nextElementSibling;
+                        progressBar.style.width = `${currentValues[e]}%`;
+                        valueElement.textContent = `${currentValues[e]}%`;
+                    });
+                }
+            }
+            // Topic buttons
+            topicButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    chatInput.value = this.getAttribute('data-topic');
+                    chatInput.focus();
+                    chatInput.dispatchEvent(new Event('input'));
+                });
+            });
+            // Mental health exercises
+            const exerciseButtons = document.querySelectorAll('.exercise-button');
+            const exerciseContent = {
+                'mindful-breathing': {
+                    title: 'Mindful Breathing Exercise',
+                    steps: [
+                        'Find a comfortable position and close your eyes if you wish.',
+                        'Take a deep breath in through your nose for 4 counts.',
+                        'Hold your breath for a moment.',
+                        'Exhale slowly through your mouth for 6 counts.',
+                        'Focus only on your breath, noticing the sensation of air moving in and out.',
+                        'Repeat this process 5 times, or until you feel more centered.'
+                    ],
+                    emotion: 'neutral'
+                },
+                'grounding': {
+                    title: '5-4-3-2-1 Grounding Technique',
+                    steps: [
+                        'Look around you and name 5 things you can see.',
+                        'Notice 4 things you can physically feel or touch right now.',
+                        'Listen for 3 distinct sounds around you.',
+                        'Identify 2 things you can smell (or like the smell of).',
+                        'Name 1 thing you can taste right now (or a favorite taste).',
+                        'This exercise helps bring you back to the present moment when feeling anxious or overwhelmed.'
+                    ],
+                    emotion: 'fear'
+                },
+                'gratitude': {
+                    title: 'Gratitude Practice',
+                    steps: [
+                        'Take a moment to reflect on your day or week.',
+                        'Think of three specific things you feel grateful for, no matter how small.',
+                        'For each one, consider: What made this possible? How did it make you feel?',
+                        'Try to be specific rather than general (e.g., "The kind email from my colleague" rather than "My job").',
+                        'Notice any positive feelings that arise as you practice gratitude.',
+                        'Consider making this a daily practice, perhaps at the beginning or end of each day.'
+                    ],
+                    emotion: 'joy'
+                }
+            };
+            function displayExercise(exerciseType) {
+                const exercise = exerciseContent[exerciseType];
+                if (!exercise) return;
+                addMessage(exercise.title, 'bot', exercise.emotion);
+                showTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    let stepsMessage = '<ol>';
+                    exercise.steps.forEach(step => {
+                        stepsMessage += `<li>${step}</li>`;
+                    });
+                    stepsMessage += '</ol>';
+                    addMessage(stepsMessage, 'bot', exercise.emotion);
+                    setTimeout(() => {
+                        showTypingIndicator();
+                        setTimeout(() => {
+                            removeTypingIndicator();
+                            addMessage('How did that exercise feel for you? Would you like to try another one?', 'bot', 'neutral');
+                        }, 1500);
+                    }, 1000);
+                }, 1500);
+            }
+            exerciseButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    displayExercise(this.getAttribute('data-exercise'));
+                });
+            });
+            // Mood Tracker
+            function initMoodTracker() {
+                const moodHistory = JSON.parse(localStorage.getItem('moodHistory')) || [];
+                if (moodHistory.length > 0) updateMoodChart(moodHistory);
+            }
+            function handleMoodSelection(mood) {
+                const moodEntry = {
+                    mood: mood,
+                    timestamp: new Date().toISOString(),
+                    date: new Date().toLocaleDateString()
+                };
+                let moodHistory = JSON.parse(localStorage.getItem('moodHistory')) || [];
+                moodHistory.push(moodEntry);
+                if (moodHistory.length > 7) moodHistory = moodHistory.slice(moodHistory.length - 7);
+                localStorage.setItem('moodHistory', JSON.stringify(moodHistory));
+                updateMoodChart(moodHistory);
+                respondToMoodSelection(mood);
+            }
+            function updateMoodChart(moodHistory) {
+                if (moodHistory.length === 0) return;
+                moodChart.innerHTML = '';
+                const chartContent = document.createElement('div');
+                chartContent.className = 'mood-chart-content';
+                moodHistory.forEach(entry => {
+                    const moodItem = document.createElement('div');
+                    moodItem.className = `mood-history-item mood-${entry.mood}`;
+                    const moodDate = document.createElement('span');
+                    moodDate.className = 'mood-date';
+                    moodDate.textContent = entry.date;
+                    const moodIcon = document.createElement('span');
+                    moodIcon.className = 'mood-icon';
+                    let iconSVG = '';
+                    switch(entry.mood) {
+                        case 'great':
+                            iconSVG = '😊'; break;
+                        case 'good':
+                            iconSVG = '🙂'; break;
+                        case 'okay':
+                            iconSVG = '😐'; break;
+                        case 'bad':
+                            iconSVG = '😕'; break;
+                        case 'awful':
+                            iconSVG = '😢'; break;
+                    }
+                    moodIcon.textContent = iconSVG;
+                    const moodName = document.createElement('span');
+                    moodName.className = 'mood-name';
+                    moodName.textContent = entry.mood.charAt(0).toUpperCase() + entry.mood.slice(1);
+                    moodItem.appendChild(moodDate);
+                    moodItem.appendChild(moodIcon);
+                    moodItem.appendChild(moodName);
+                    chartContent.appendChild(moodItem);
+                });
+                moodChart.appendChild(chartContent);
+            }
+            function respondToMoodSelection(mood) {
+                let response = '';
+                let emotion = 'neutral';
+                switch(mood) {
+                    case 'great':
+                        response = "I'm glad to hear you're feeling great today! What's contributing to your positive mood?";
+                        emotion = 'joy'; break;
+                    case 'good':
+                        response = "It's good to hear you're doing well today. Is there anything specific that's making your day good?";
+                        emotion = 'joy'; break;
+                    case 'okay':
+                        response = "Thanks for sharing that you're feeling okay today. Is there anything you'd like to talk about or any way I can support you?";
+                        emotion = 'neutral'; break;
+                    case 'bad':
+                        response = "I'm sorry to hear you're not feeling well today. Would you like to talk about what's troubling you?";
+                        emotion = 'sadness'; break;
+                    case 'awful':
+                        response = "I'm really sorry you're feeling awful today. That sounds difficult. Would it help to share what's going on?";
+                        emotion = 'sadness'; break;
+                }
+                showTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addMessage(response, 'bot', emotion);
+                }, 1000);
+            }
+            moodOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    moodOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    handleMoodSelection(this.getAttribute('data-mood'));
+                });
+            });
+            initMoodTracker();
+            // Server status checker
+            function initServerStatusChecker() {
+                const serverStatusElement = document.getElementById('server-status');
+                const statusText = serverStatusElement.querySelector('.status-text');
+                function checkServerStatus() {
+                    fetch('http://localhost:5005/status')
+                        .then(response => {
+                            if (response.ok) return response.json();
+                            throw new Error('Server connection failed');
+                        })
+                        .then(data => {
+                            serverStatusElement.classList.remove('disconnected');
+                            serverStatusElement.classList.add('connected');
+                            statusText.textContent = 'Connected';
+                        })
+                        .catch(error => {
+                            serverStatusElement.classList.remove('connected');
+                            serverStatusElement.classList.add('disconnected');
+                            statusText.textContent = 'Disconnected';
+                        });
+                }
+                checkServerStatus();
+                setInterval(checkServerStatus, 5000);
+            }
+            initServerStatusChecker();
+            // Chat input events
+            sendButton.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        });
+    </script>
+</body>
+</html>

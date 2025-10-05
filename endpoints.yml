@@ -1,0 +1,28 @@
+# Rasa Endpoints Configuration for CogniSentinel Mental Health Chatbot
+
+# Action Server Endpoint - for custom actions
+action_endpoint:
+  url: "http://localhost:5055/webhook"
+  timeout: 20  # seconds
+  token: ""  # optional authentication token
+
+# Tracker Store - for conversation history persistence
+# Using InMemoryTrackerStore by default (no configuration needed)
+# Uncomment below for database storage in production
+# tracker_store:
+#   type: sql
+#   dialect: "sqlite"  # or "postgresql"
+#   url: "sqlite:///./rasa.db"
+
+# Event Broker - for event publishing (not needed for basic setup)
+# event_broker:
+#   type: pika
+#   url: localhost
+#   username: guest
+#   password: guest
+#   queue: rasa_events
+
+# Model Server - for loading models (default is local)
+model:
+  server_url: null  # null means load from local file system
+  wait_time_between_pulls: 20  # in seconds

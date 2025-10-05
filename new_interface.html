@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CogniSentinel - Advanced Mental Wellness Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Main color scheme */
+            --primary: #7F5AF0;
+            --primary-light: #9D7FFF;
+            --primary-dark: #6A4CD3;
+            --secondary: #2CB67D;
+            --secondary-light: #4ADDA1;
+            --secondary-dark: #229D68;
+            --accent: #FF8E3C;
+            --accent-light: #FFA964;
+            --accent-dark: #F47920;
+            
+            /* Background colors */
+            --bg-dark: #16161A;
+            --bg-medium: #242629;
+            --bg-light: #2E3035;
+            
+            /* Text colors */
+            --text-light: #FFFFFE;
+            --text-medium: #94A1B2;
+            --text-dark: #72757E;
+            
+            /* Emotion colors */
+            --emotion-joy: rgba(255, 217, 102, 0.3);
+            --emotion-sadness: rgba(102, 178, 255, 0.3);
+            --emotion-anger: rgba(255, 102, 102, 0.3);
+            --emotion-fear: rgba(178, 102, 255, 0.3);
+            --emotion-neutral: rgba(200, 200, 200, 0.2);
+            
+            /* Functional colors */
+            --success: #2CB67D;
+            --warning: #FFB347;
+            --danger: #EF4565;
+            
+            /* Glass effect variables */
+            --glass-bg: rgba(36, 38, 41, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --glass-blur: 10px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1A1B26 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--primary-dark) 0%, transparent 20%),
+                        radial-gradient(circle at 80% 20%, var(--secondary-dark) 0%, transparent 20%),
+                        radial-gradient(circle at 20% 80%, var(--accent-dark) 0%, transparent 20%);
+            opacity: 0.1;
+            z-index: -1;
+            animation: backgroundShift 30s infinite alternate ease-in-out;
+        }
+        
+        @keyframes backgroundShift {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(5deg) scale(1.1); }
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(127, 90, 240, 0.3);
+        }
+        
+        .logo-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-light);
+        }
+        
+        .logo-text {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: var(--text-medium);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        nav a:hover {
+            color: var(--text-light);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+            gap: 1.5rem; /* Slightly reduced gap */
+            margin-bottom: 2rem;
+        }
+        
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--glass-shadow);
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .chat-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(127, 90, 240, 0.3);
+        }
+        
+        .chat-avatar svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-light);
+        }
+        
+        .chat-info h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .chat-info p {
+            font-size: 0.875rem;
+            color: var(--text-medium);
+        }
+        
+        .chat-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: auto;
+            padding: 0.5rem 1rem;
+            background: rgba(44, 182, 125, 0.1);
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--success);
+            box-shadow: 0 0 5px var(--success);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .message {
+            max-width: 65%; /* Reduced max-width for messages */
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            position: relative;
+            animation: messageAppear 0.3s ease-out;
+        }
+        
+        @keyframes messageAppear {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.bot {
+            align-self: flex-start;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-top-left-radius: 0;
+        }
+        
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-top-right-radius: 0;
+        }
+        
+        .message.bot::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -10px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-right: 10px solid var(--glass-bg);
+        }
+        
+        .message.user::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -10px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-left: 10px solid var(--primary-dark);
+        }
+        
+        .message-content {
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+        
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--text-medium);
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+        
+        .message.bot .message-time {
+            color: var(--text-medium);
+        }
+        
+        .message.user .message-time {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Emotion-specific styling */
+        .message.bot.joy {
+            background: linear-gradient(135deg, var(--glass-bg) 0%, var(--glass-bg) 100%);
+            border-left: 3px solid var(--accent);
+            box-shadow: 0 4px 15px rgba(255, 142, 60, 0.1);
+        }
+        
+        .message.bot.sadness {
+            background: linear-gradient(135deg, var(--glass-bg) 0%, var(--glass-bg) 100%);
+            border-left: 3px solid var(--primary);
+            box-shadow: 0 4px 15px rgba(127, 90, 240, 0.1);
+        }
+        
+        .message.bot.anger {
+            background: linear-gradient(135deg, var(--glass-bg) 0%, var(--glass-bg) 100%);
+            border-left: 3px solid var(--danger);
+            box-shadow: 0 4px 15px rgba(239, 69, 101, 0.1);
+        }
+        
+        .message.bot.fear {
+            background: linear-gradient(135deg, var(--glass-bg) 0%, var(--glass-bg) 100%);
+            border-left: 3px solid var(--warning);
+            box-shadow: 0 4px 15px rgba(255, 179, 71, 0.1);
+        }
+        
+        .message.bot.neutral {
+            background: linear-gradient(135deg, var(--glass-bg) 0%, var(--glass-bg) 100%);
+            border-left: 3px solid var(--secondary);
+            box-shadow: 0 4px 15px rgba(44, 182, 125, 0.1);
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            width: fit-content;
+            margin-top: 0.5rem;
+            animation: messageAppear 0.3s ease-out;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--text-medium);
+            animation: typingPulse 1.5s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typingPulse {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .chat-input-container {
+            padding: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .chat-input {
+            flex: 1;
+            background: rgba(22, 22, 26, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            resize: none;
+            height: 60px;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(127, 90, 240, 0.2);
+        }
+        
+        .chat-input::placeholder {
+            color: var(--text-dark);
+        }
+        
+        .send-button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            border-radius: 12px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(127, 90, 240, 0.3);
+        }
+        
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(127, 90, 240, 0.4);
+        }
+        
+        .send-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(127, 90, 240, 0.2);
+        }
+        
+        .send-button svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-light);
+            transition: transform 0.3s ease;
+        }
+        
+        .send-button:hover svg {
+            transform: rotate(45deg);
+        }
+        
+        .sidebar {
+            width: 300px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--glass-shadow);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .sidebar-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .emotion-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .emotion-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .emotion-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-medium);
+        }
+        
+        .emotion-icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .emotion-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(22, 22, 26, 0.5);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0 0.75rem;
+        }
+        
+        .emotion-progress {
+            height: 100%;
+            border-radius: 3px;
+        }
+        
+        .emotion-progress.joy { background: var(--accent); }
+        .emotion-progress.sadness { background: var(--primary); }
+        .emotion-progress.anger { background: var(--danger); }
+        .emotion-progress.fear { background: var(--warning); }
+        .emotion-progress.neutral { background: var(--secondary); }
+        
+        .emotion-value {
+            font-size: 0.875rem;
+            color: var(--text-medium);
+            width: 30px;
+            text-align: right;
+        }
+        
+        .suggested-topics {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .topic-button {
+            background: rgba(22, 22, 26, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-medium);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.875rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .topic-button:hover {
+            background: rgba(127, 90, 240, 0.1);
+            border-color: var(--primary);
+            color: var(--text-light);
+            transform: translateY(-2px);
+        }
+        
+        .resources {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(22, 22, 26, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-medium);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+        
+        .resource-link:hover {
+            background: rgba(44, 182, 125, 0.1);
+            border-color: var(--secondary);
+            color: var(--text-light);
+            transform: translateY(-2px);
+        }
+        
+        /* Mental Health Exercises Styles */
+        .exercises-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        /* Mood Tracker Styles */
+        .mood-tracker {
+            margin-top: 15px;
+        }
+        
+        .mood-question {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        
+        .mood-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .mood-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: calc(20% - 8px);
+        }
+        
+        .mood-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-color);
+        }
+        
+        .mood-option svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .mood-option span {
+            font-size: 0.8rem;
+            color: var(--text-primary);
+        }
+        
+        .mood-history {
+            margin-top: 20px;
+        }
+        
+        .mood-history h4 {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        
+        .mood-chart {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            min-height: 100px;
+        }
+        
+        .mood-chart-placeholder {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .mood-chart-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .mood-history-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: rgba(22, 22, 26, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .mood-history-item:hover {
+            transform: translateX(3px);
+            background: rgba(22, 22, 26, 0.5);
+        }
+        
+        .mood-date {
+            font-size: 0.75rem;
+            color: var(--text-medium);
+            margin-right: 10px;
+            min-width: 70px;
+        }
+        
+        .mood-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+        }
+        
+        .mood-name {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .mood-option.selected {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+        }
+        
+        .mood-great { border-left: 3px solid #FFB347; }
+        .mood-good { border-left: 3px solid #2CB67D; }
+        .mood-okay { border-left: 3px solid #94A1B2; }
+        .mood-bad { border-left: 3px solid #7F5AF0; }
+        .mood-awful { border-left: 3px solid #EF4565; }
+        
+        .exercise-card {
+            background: rgba(22, 22, 26, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .exercise-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glass-shadow);
+            border-color: var(--secondary);
+        }
+        
+        .exercise-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .exercise-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            fill: var(--secondary);
+        }
+        
+        .exercise-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin: 0;
+        }
+        
+        .exercise-card p {
+            font-size: 14px;
+            color: var(--text-medium);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .exercise-button {
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--secondary) 100%);
+            color: var(--text-light);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .exercise-button:hover {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
+            transform: translateY(-2px);
+        }
+        
+        .resource-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--secondary);
+            border-radius: 6px;
+        }
+        
+        .resource-icon svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--text-light);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.5rem 0;
+            color: var(--text-medium);
+            font-size: 0.875rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 0.75rem;
+        }
+        
+        .footer-link {
+            color: var(--text-medium);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--text-light);
+        }
+        
+        /* Server status indicator styles */
+        .server-status {
+            display: flex;
+            align-items: center;
+            font-size: 0.75rem;
+            margin-left: 1rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            background-color: var(--bg-light);
+            transition: all 0.3s ease;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .server-status.connected {
+            border: 1px solid var(--success);
+        }
+        
+        .server-status.connected .status-indicator {
+            background-color: var(--success);
+            box-shadow: 0 0 5px var(--success);
+        }
+        
+        .server-status.connected .status-text {
+            color: var(--success);
+        }
+        
+        .server-status.disconnected {
+            border: 1px solid var(--danger);
+        }
+        
+        .server-status.disconnected .status-indicator {
+            background-color: var(--danger);
+            box-shadow: 0 0 5px var(--danger);
+        }
+        
+        .server-status.disconnected .status-text {
+            color: var(--danger);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .chat-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+            
+            .chat-status {
+                margin-left: 0;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L5,8.09V15.91L12,19.85L19,15.91V8.09L12,4.15M12,6.23L16.9,9.06L12,11.89L7.1,9.06L12,6.23M17,14.89L13,17.2V13.62L17,11.31V14.89M11,17.2L7,14.89V11.31L11,13.62V17.2Z" />
+                    </svg>
+                </div>
+                <div class="logo-text">CogniSentinel</div>
+                <div id="server-status" class="server-status disconnected" title="Server connection status">
+                    <span class="status-indicator"></span>
+                    <span class="status-text">Disconnected</span>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Resources</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <div class="main-content">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-avatar">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.58,20 4,16.42 4,12C4,7.58 7.58,4 12,4C16.42,4 20,7.58 20,12C20,16.42 16.42,20 12,20M13,9.94L14.06,11L15.12,9.94L16.18,11L17.24,9.94L15.12,7.82L13,9.94M8.88,9.94L9.94,11L11,9.94L8.88,7.82L6.76,9.94L7.82,11L8.88,9.94M12,17.5C14.33,17.5 16.31,16.04 17.11,14H6.89C7.69,16.04 9.67,17.5 12,17.5Z" />
+                        </svg>
+                    </div>
+                    <div class="chat-info">
+                        <h2>CogniSentinel Assistant</h2>
+                        <p>Your mental wellness companion</p>
+                    </div>
+                    <div class="chat-status">
+                        <span class="status-dot"></span>
+                        <span>Online</span>
+                    </div>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot neutral">
+                        <div class="message-content">
+                            <p>Hello! I'm CogniSentinel, your mental wellness companion. I'm here to listen, support, and help you navigate your thoughts and feelings. How are you feeling today?</p>
+                        </div>
+                        <div class="message-time">12:00 PM</div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <textarea class="chat-input" id="chatInput" placeholder="Type your message here..." rows="1"></textarea>
+                    <button class="send-button" id="sendButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <h3>Emotion Analysis</h3>
+                    <div class="emotion-stats">
+                        <div class="emotion-item">
+                            <div class="emotion-label">
+                                <svg class="emotion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFB347">
+                                    <path d="M12,17.5C14.33,17.5 16.3,16.04 17.11,14H6.89C7.69,16.04 9.67,17.5 12,17.5M8.5,11A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,11M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+                                </svg>
+                                Joy
+                            </div>
+                            <div class="emotion-bar">
+                                <div class="emotion-progress joy" style="width: 25%"></div>
+                            </div>
+                            <div class="emotion-value">25%</div>
+                        </div>
+                        <div class="emotion-item">
+                            <div class="emotion-label">
+                                <svg class="emotion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#7F5AF0">
+                                    <path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M16.18,7.76L15.12,8.82L14.06,7.76L13,8.82L14.06,9.88L13,10.94L14.06,12L15.12,10.94L16.18,12L17.24,10.94L16.18,9.88L17.24,8.82L16.18,7.76M7.82,12L8.88,10.94L9.94,12L11,10.94L9.94,9.88L11,8.82L9.94,7.76L8.88,8.82L7.82,7.76L6.76,8.82L7.82,9.88L6.76,10.94L7.82,12M12,14C9.67,14 7.69,15.46 6.89,17.5H17.11C16.31,15.46 14.33,14 12,14Z" />
+                                </svg>
+                                Sadness
+                            </div>
+                            <div class="emotion-bar">
+                                <div class="emotion-progress sadness" style="width: 15%"></div>
+                            </div>
+                            <div class="emotion-value">15%</div>
+                        </div>
+                        <div class="emotion-item">
+                            <div class="emotion-label">
+                                <svg class="emotion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#EF4565">
+                                    <path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M15.5,8A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,11A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,8M8.5,8A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,11A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,8M12,14C9.66,14 7.14,15.28 5.78,17.5L7.43,18.5C8.5,16.76 10.42,15.5 12,15.5C13.58,15.5 15.5,16.76 16.57,18.5L18.22,17.5C16.86,15.28 14.34,14 12,14Z" />
+                                </svg>
+                                Anger
+                            </div>
+                            <div class="emotion-bar">
+                                <div class="emotion-progress anger" style="width: 10%"></div>
+                            </div>
+                            <div class="emotion-value">10%</div>
+                        </div>
+                        <div class="emotion-item">
+                            <div class="emotion-label">
+                                <svg class="emotion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFB347">
+                                    <path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M8.5,11A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,11M12,13.5C9.67,13.5 7.69,14.96 6.89,17H17.11C16.31,14.96 14.33,13.5 12,13.5Z" />
+                                </svg>
+                                Fear
+                            </div>
+                            <div class="emotion-bar">
+                                <div class="emotion-progress fear" style="width: 5%"></div>
+                            </div>
+                            <div class="emotion-value">5%</div>
+                        </div>
+                        <div class="emotion-item">
+                            <div class="emotion-label">
+                                <svg class="emotion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2CB67D">
+                                    <path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M8.5,11A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,11M12,17A5,5 0 0,0 17,12H7A5,5 0 0,0 12,17Z" />
+                                </svg>
+                                Neutral
+                            </div>
+                            <div class="emotion-bar">
+                                <div class="emotion-progress neutral" style="width: 45%"></div>
+                            </div>
+                            <div class="emotion-value">45%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>Daily Mood Tracker</h3>
+                    <div class="mood-tracker">
+                        <div class="mood-question">How are you feeling today?</div>
+                        <div class="mood-options">
+                            <button class="mood-option" data-mood="great">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFB347">
+                                    <path d="M12,17.5C14.33,17.5 16.3,16.04 17.11,14H6.89C7.69,16.04 9.67,17.5 12,17.5M8.5,11A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,11M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+                                </svg>
+                                <span>Great</span>
+                            </button>
+                            <button class="mood-option" data-mood="good">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2CB67D">
+                                    <path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M8.5,11A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,11M12,17A5,5 0 0,0 17,12H7A5,5 0 0,0 12,17Z" />
+                                </svg>
+                                <span>Good</span>
+                            </button>
+                            <button class="mood-option" data-mood="okay">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#94A1B2">
+                                    <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M8.5,11A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,11M12,13A5,5 0 0,0 7,18H17A5,5 0 0,0 12,13Z" />
+                                </svg>
+                                <span>Okay</span>
+                            </button>
+                            <button class="mood-option" data-mood="bad">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#7F5AF0">
+                                    <path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M8.5,11A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,11M12,14C9.66,14 7.14,15.28 5.78,17.5L7.43,18.5C8.5,16.76 10.42,15.5 12,15.5C13.58,15.5 15.5,16.76 16.57,18.5L18.22,17.5C16.86,15.28 14.34,14 12,14Z" />
+                                </svg>
+                                <span>Bad</span>
+                            </button>
+                            <button class="mood-option" data-mood="awful">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#EF4565">
+                                    <path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M16.18,7.76L15.12,8.82L14.06,7.76L13,8.82L14.06,9.88L13,10.94L14.06,12L15.12,10.94L16.18,12L17.24,10.94L16.18,9.88L17.24,8.82L16.18,7.76M7.82,12L8.88,10.94L9.94,12L11,10.94L9.94,9.88L11,8.82L9.94,7.76L8.88,8.82L7.82,7.76L6.76,8.82L7.82,9.88L6.76,10.94L7.82,12M12,14C9.67,14 7.69,15.46 6.89,17.5H17.11C16.31,15.46 14.33,14 12,14Z" />
+                                </svg>
+                                <span>Awful</span>
+                            </button>
+                        </div>
+                        <div class="mood-history">
+                            <h4>Your Mood History</h4>
+                            <div class="mood-chart" id="moodChart">
+                                <div class="mood-chart-placeholder">Your mood history will appear here after you log your first mood.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>Suggested Topics</h3>
+                    <div class="suggested-topics">
+                        <button class="topic-button" data-topic="I've been feeling anxious lately and I'm not sure why.">I've been feeling anxious lately</button>
+                        <button class="topic-button" data-topic="I'm having trouble sleeping at night. Any suggestions?">Trouble sleeping at night</button>
+                        <button class="topic-button" data-topic="How can I improve my mood when I'm feeling down?">Improving mood when feeling down</button>
+                        <button class="topic-button" data-topic="I feel overwhelmed with work and personal responsibilities.">Feeling overwhelmed with responsibilities</button>
+                        <button class="topic-button" data-topic="I'm struggling with negative thoughts that won't go away.">Struggling with negative thoughts</button>
+                        <button class="topic-button" data-topic="How can I practice better self-care during stressful times?">Self-care during stress</button>
+                        <button class="topic-button" data-topic="I'm having difficulty concentrating on my work or studies.">Difficulty concentrating</button>
+                        <button class="topic-button" data-topic="How can I improve my relationships with others?">Improving relationships</button>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>Mental Health Exercises</h3>
+                    <div class="exercises-container">
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <svg class="exercise-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10M10,22C9.75,22 9.54,21.82 9.5,21.58L9.13,18.93C8.5,18.68 7.96,18.34 7.44,17.94L4.95,18.95C4.73,19.03 4.46,18.95 4.34,18.73L2.34,15.27C2.21,15.05 2.27,14.78 2.46,14.63L4.57,12.97L4.5,12L4.57,11L2.46,9.37C2.27,9.22 2.21,8.95 2.34,8.73L4.34,5.27C4.46,5.05 4.73,4.96 4.95,5.05L7.44,6.05C7.96,5.66 8.5,5.32 9.13,5.07L9.5,2.42C9.54,2.18 9.75,2 10,2H14C14.25,2 14.46,2.18 14.5,2.42L14.87,5.07C15.5,5.32 16.04,5.66 16.56,6.05L19.05,5.05C19.27,4.96 19.54,5.05 19.66,5.27L21.66,8.73C21.79,8.95 21.73,9.22 21.54,9.37L19.43,11L19.5,12L19.43,13L21.54,14.63C21.73,14.78 21.79,15.05 21.66,15.27L19.66,18.73C19.54,18.95 19.27,19.04 19.05,18.95L16.56,17.95C16.04,18.34 15.5,18.68 14.87,18.93L14.5,21.58C14.46,21.82 14.25,22 14,22H10M11.25,4L10.88,6.61C9.68,6.86 8.62,7.5 7.85,8.39L5.44,7.35L4.69,8.65L6.8,10.2C6.4,11.37 6.4,12.64 6.8,13.8L4.68,15.36L5.43,16.66L7.86,15.62C8.63,16.5 9.68,17.14 10.87,17.38L11.24,20H12.76L13.13,17.39C14.32,17.14 15.37,16.5 16.14,15.62L18.57,16.66L19.32,15.36L17.2,13.81C17.6,12.64 17.6,11.37 17.2,10.2L19.31,8.65L18.56,7.35L16.15,8.39C15.38,7.5 14.32,6.86 13.12,6.62L12.75,4H11.25Z" />
+                                </svg>
+                                <h4>Mindful Breathing</h4>
+                            </div>
+                            <p>Take 5 deep breaths, inhaling for 4 counts and exhaling for 6. Focus only on your breath.</p>
+                            <button class="exercise-button" data-exercise="mindful-breathing">Try Now</button>
+                        </div>
+                        
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <svg class="exercise-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z" />
+                                </svg>
+                                <h4>Grounding Technique</h4>
+                            </div>
+                            <p>Name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, and 1 you can taste.</p>
+                            <button class="exercise-button" data-exercise="grounding">Try Now</button>
+                        </div>
+                        
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <svg class="exercise-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" />
+                                </svg>
+                                <h4>Gratitude Practice</h4>
+                            </div>
+                            <p>Write down three things you're grateful for today, no matter how small they might seem.</p>
+                            <button class="exercise-button" data-exercise="gratitude">Try Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>Helpful Resources</h3>
+                    <div class="resources">
+                        <a href="#" class="resource-link">
+                            <div class="resource-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z" />
+                                </svg>
+                            </div>
+                            <span>Mental Health Education</span>
+                        </a>
+                        <a href="#" class="resource-link">
+                            <div class="resource-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
+                                </svg>
+                            </div>
+                            <span>Find a Therapist</span>
+                        </a>
+                        <a href="#" class="resource-link">
+                            <div class="resource-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M20,11H4V8H20M20,15H13V13H20M20,19H13V17H20M11,19H4V13H11M20.33,4.67L18.67,3L17,4.67L15.33,3L13.67,4.67L12,3L10.33,4.67L8.67,3L7,4.67L5.33,3L3.67,4.67L2,3V19A2,2 0 0,0 4,21H20A2,2 0 0,0 22,19V3L20.33,4.67Z" />
+                                </svg>
+                            </div>
+                            <span>Crisis Hotlines</span>
+                        </a>
+                        <a href="#" class="resource-link">
+                            <div class="resource-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M12,15C7.58,15 4,16.79 4,19V21H20V19C20,16.79 16.42,15 12,15M8,9A4,4 0 0,0 12,13A4,4 0 0,0 16,9M11.5,2C11.2,2 11,2.21 11,2.5V5.5H10V3C10,3 7.75,3.86 7.75,6.75C7.75,6.75 7,6.89 7,8H17C16.95,6.89 16.25,6.75 16.25,6.75C16.25,3.86 14,3 14,3V5.5H13V2.5C13,2.21 12.8,2 12.5,2H11.5Z" />
+                                </svg>
+                            </div>
+                            <span>Self-Care Techniques</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 CogniSentinel - Mental Wellness Companion. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+                <a href="#" class="footer-link">Contact Us</a>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+            const topicButtons = document.querySelectorAll('.topic-button');
+            const moodOptions = document.querySelectorAll('.mood-option');
+            const moodChart = document.getElementById('moodChart');
+            
+            // Function to add a message to the chat
+            function addMessage(text, sender, emotion = 'neutral') {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender} ${emotion}`;
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.innerHTML = `<p>${text}</p>`;
+                
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'message-time';
+                const now = new Date();
+                timeDiv.textContent = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+                
+                messageDiv.appendChild(contentDiv);
+                messageDiv.appendChild(timeDiv);
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to show typing indicator
+            function showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'typing-indicator';
+                typingDiv.id = 'typingIndicator';
+                
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'typing-dot';
+                    typingDiv.appendChild(dot);
+                }
+                
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to remove typing indicator
+            function removeTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            // Function to generate empathetic responses when Rasa is unavailable
+            function generateEmpathicResponse(userMessage) {
+                // Common mental health concerns and supportive responses
+                const responsePatterns = [
+                    {
+                        keywords: ['sad', 'unhappy', 'depressed', 'down', 'blue', 'miserable'],
+                        responses: [
+                            "I'm sorry to hear you're feeling down. It's okay to feel sad sometimes, and your feelings are valid. Would you like to talk more about what's making you feel this way?",
+                            "I understand that feeling sad can be overwhelming. Remember that you're not alone in this. Would it help to share more about what's happening?",
+                            "When we feel sad, it can be hard to see beyond those feelings. I'm here to listen without judgment. What's been on your mind lately?"
+                        ],
+                        emotion: 'sadness'
+                    },
+                    {
+                        keywords: ['anxious', 'worried', 'nervous', 'stress', 'stressed', 'panic', 'fear'],
+                        responses: [
+                            "Anxiety can be really challenging to deal with. Taking slow, deep breaths might help in the moment. Would you like to tell me more about what's causing your anxiety?",
+                            "It sounds like you're experiencing some anxiety. That's a natural response, though it can be uncomfortable. Is there something specific that's triggering these feelings?",
+                            "When anxiety takes hold, it can be hard to think clearly. You're doing the right thing by reaching out. Can you share what's making you feel this way?"
+                        ],
+                        emotion: 'fear'
+                    },
+                    {
+                        keywords: ['angry', 'mad', 'frustrated', 'annoyed', 'irritated'],
+                        responses: [
+                            "It sounds like you're feeling frustrated. Those feelings are completely valid. Would it help to talk about what's causing this anger?",
+                            "Anger is a natural emotion that we all experience. Sometimes expressing it in a safe way can help. What's been triggering these feelings for you?",
+                            "When we feel angry, it's often because something important to us is being threatened or challenged. I'm here to listen if you want to share more."
+                        ],
+                        emotion: 'anger'
+                    },
+                    {
+                        keywords: ['tired', 'exhausted', 'fatigue', 'sleep', 'insomnia', 'rest'],
+                        responses: [
+                            "Being tired can affect our mental health significantly. Have you been having trouble sleeping lately? Would you like to talk about what might be keeping you awake?",
+                            "Fatigue can make everything feel more difficult. Your body might be telling you something important. How long have you been feeling this way?",
+                            "Sleep problems can be both a symptom and a cause of stress. I'm here to listen if you want to share more about what you're experiencing."
+                        ],
+                        emotion: 'neutral'
+                    },
+                    {
+                        keywords: ['lonely', 'alone', 'isolated', 'no friends', 'no one'],
+                        responses: [
+                            "Feeling lonely can be really painful. Even when we're surrounded by people, we can still feel isolated. Would you like to talk more about these feelings?",
+                            "I'm sorry you're feeling alone. Connection is such an important human need. Have you felt this way for a while?",
+                            "Loneliness is something many people experience, though we don't always talk about it. You're not alone in feeling this way. Would you like to share more about your situation?"
+                        ],
+                        emotion: 'sadness'
+                    },
+                    {
+                        keywords: ['overwhelmed', 'too much', 'can\'t cope', 'struggling'],
+                        responses: [
+                            "It sounds like you're feeling overwhelmed right now. That's completely understandable. Sometimes breaking things down into smaller steps can help. Would you like to talk about what's on your plate?",
+                            "When everything feels too much, it's important to be gentle with yourself. You don't have to handle everything at once. What's feeling most pressing for you right now?",
+                            "Feeling overwhelmed is a sign that you might need some support or a different approach. You're doing the right thing by talking about it. Can you tell me more about what you're dealing with?"
+                        ],
+                        emotion: 'fear'
+                    },
+                    {
+                        keywords: ['help', 'support', 'need advice', 'guidance'],
+                        responses: [
+                            "I'm here to support you. To help you best, could you share a bit more about what you're going through?",
+                            "I'm glad you're reaching out for support. That takes courage. What kind of help are you looking for today?",
+                            "I'm here to listen and offer support. Could you tell me more about your situation so I can better understand how to help?"
+                        ],
+                        emotion: 'neutral'
+                    },
+                    {
+                        keywords: ['happy', 'good', 'great', 'wonderful', 'joy', 'excited'],
+                        responses: [
+                            "It's wonderful to hear you're feeling good! Positive emotions are worth celebrating. What's contributing to your happiness today?",
+                            "I'm glad you're feeling well! Sharing positive experiences can help us appreciate them even more. Would you like to tell me more about what's going well?",
+                            "That's great to hear! Recognizing and savoring positive emotions is an important part of mental wellness. What's bringing you joy right now?"
+                        ],
+                        emotion: 'joy'
+                    },
+                    {
+                        keywords: ['hello', 'hi', 'hey', 'greetings'],
+                        responses: [
+                            "Hello! I'm here to support you with whatever you'd like to talk about today. How are you feeling?",
+                            "Hi there! I'm your mental health companion. How are you doing today? Is there something specific on your mind?",
+                            "Hello! It's good to connect with you. How are you feeling today? I'm here to listen and support you."
+                        ],
+                        emotion: 'neutral'
+                    }
+                ];
+                
+                // Default responses if no keywords match
+                const defaultResponses = [
+                    {
+                        text: "Thank you for sharing that with me. Could you tell me more about how you're feeling?",
+                        emotion: 'neutral'
+                    },
+                    {
+                        text: "I'm here to listen and support you. Would you like to elaborate on what you're experiencing?",
+                        emotion: 'neutral'
+                    },
+                    {
+                        text: "I appreciate you reaching out. To better understand your situation, could you share a bit more about what's on your mind?",
+                        emotion: 'neutral'
+                    },
+                    {
+                        text: "I'm here for you. Sometimes talking through our thoughts can help us process them better. Would you like to tell me more?",
+                        emotion: 'neutral'
+                    },
+                    {
+                        text: "Your feelings are important. I'd like to understand more about what you're going through so I can offer better support.",
+                        emotion: 'neutral'
+                    }
+                ];
+                
+                // Convert user message to lowercase for matching
+                const lowerMessage = userMessage.toLowerCase();
+                
+                // Check for keyword matches
+                for (const pattern of responsePatterns) {
+                    for (const keyword of pattern.keywords) {
+                        if (lowerMessage.includes(keyword)) {
+                            // Return a random response from the matching pattern
+                            const randomResponse = pattern.responses[Math.floor(Math.random() * pattern.responses.length)];
+                            return {
+                                text: randomResponse,
+                                emotion: pattern.emotion
+                            };
+                        }
+                    }
+                }
+                
+                // If no keywords match, return a default response
+                return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+            }
+            
+            // Function to handle sending a message
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (message === '') return;
+                
+                // Add user message to chat
+                addMessage(message, 'user');
+                chatInput.value = '';
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Simulate response delay
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    
+                    // Generate response
+                    const response = generateEmpathicResponse(message);
+                    addMessage(response.text, 'bot', response.emotion);
+                    
+                    // Update emotion stats (simplified simulation)
+                    updateEmotionStats(response.emotion);
+                }, 1500);
+            }
+            
+            // Function to update emotion stats
+            function updateEmotionStats(emotion) {
+                // This is a simplified simulation - in a real app, this would be more sophisticated
+                const emotions = ['joy', 'sadness', 'anger', 'fear', 'neutral'];
+                const currentValues = {};
+                
+                // Get current values
+                emotions.forEach(e => {
+                    const progressBar = document.querySelector(`.emotion-progress.${e}`);
+                    const valueElement = progressBar.parentElement.nextElementSibling;
+                    currentValues[e] = parseInt(valueElement.textContent);
+                });
+                
+                // Adjust values based on detected emotion
+                if (emotions.includes(emotion)) {
+                    // Increase the detected emotion
+                    currentValues[emotion] = Math.min(100, currentValues[emotion] + 5);
+                    
+                    // Decrease others slightly
+                    emotions.forEach(e => {
+                        if (e !== emotion) {
+                            currentValues[e] = Math.max(0, currentValues[e] - 1);
+                        }
+                    });
+                    
+                    // Update the UI
+                    emotions.forEach(e => {
+                        const progressBar = document.querySelector(`.emotion-progress.${e}`);
+                        const valueElement = progressBar.parentElement.nextElementSibling;
+                        progressBar.style.width = `${currentValues[e]}%`;
+                        valueElement.textContent = `${currentValues[e]}%`;
+                    });
+                }
+            }
+            
+            // Event listeners
+            sendButton.addEventListener('click', sendMessage);
+            
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Auto-resize textarea
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            // Topic button click handlers
+            topicButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const topic = this.getAttribute('data-topic');
+                    chatInput.value = topic;
+                    chatInput.focus();
+                    // Trigger height adjustment
+                    const event = new Event('input');
+                    chatInput.dispatchEvent(event);
+                });
+            });
+            
+            // Mental health exercise handlers
+            const exerciseButtons = document.querySelectorAll('.exercise-button');
+            
+            // Exercise content for each type
+            const exerciseContent = {
+                'mindful-breathing': {
+                    title: 'Mindful Breathing Exercise',
+                    steps: [
+                        'Find a comfortable position and close your eyes if you wish.',
+                        'Take a deep breath in through your nose for 4 counts.',
+                        'Hold your breath for a moment.',
+                        'Exhale slowly through your mouth for 6 counts.',
+                        'Focus only on your breath, noticing the sensation of air moving in and out.',
+                        'Repeat this process 5 times, or until you feel more centered.'                        
+                    ],
+                    emotion: 'neutral'
+                },
+                'grounding': {
+                    title: '5-4-3-2-1 Grounding Technique',
+                    steps: [
+                        'Look around you and name 5 things you can see.',
+                        'Notice 4 things you can physically feel or touch right now.',
+                        'Listen for 3 distinct sounds around you.',
+                        'Identify 2 things you can smell (or like the smell of).',
+                        'Name 1 thing you can taste right now (or a favorite taste).',
+                        'This exercise helps bring you back to the present moment when feeling anxious or overwhelmed.'
+                    ],
+                    emotion: 'fear'
+                },
+                'gratitude': {
+                    title: 'Gratitude Practice',
+                    steps: [
+                        'Take a moment to reflect on your day or week.',
+                        'Think of three specific things you feel grateful for, no matter how small.',
+                        'For each one, consider: What made this possible? How did it make you feel?',
+                        'Try to be specific rather than general (e.g., "The kind email from my colleague" rather than "My job").',
+                        'Notice any positive feelings that arise as you practice gratitude.',
+                        'Consider making this a daily practice, perhaps at the beginning or end of each day.'
+                    ],
+                    emotion: 'joy'
+                }
+            };
+            
+            // Function to display exercise in chat
+            function displayExercise(exerciseType) {
+                const exercise = exerciseContent[exerciseType];
+                if (!exercise) return;
+                
+                // Add bot message with exercise title
+                addMessage(exercise.title, 'bot', exercise.emotion);
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Display steps with delay for natural conversation flow
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    
+                    // Create steps message
+                    let stepsMessage = '<ol>';
+                    exercise.steps.forEach(step => {
+                        stepsMessage += `<li>${step}</li>`;
+                    });
+                    stepsMessage += '</ol>';
+                    
+                    // Add steps message
+                    addMessage(stepsMessage, 'bot', exercise.emotion);
+                    
+                    // Show completion message after a delay
+                    setTimeout(() => {
+                        showTypingIndicator();
+                        
+                        setTimeout(() => {
+                            removeTypingIndicator();
+                            addMessage('How did that exercise feel for you? Would you like to try another one?', 'bot', 'neutral');
+                        }, 1500);
+                    }, 1000);
+                }, 1500);
+            }
+            
+            // Add click event listeners to exercise buttons
+            exerciseButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const exerciseType = this.getAttribute('data-exercise');
+                    displayExercise(exerciseType);
+                });
+            });
+            
+            // Mood Tracker Functionality
+            
+            // Initialize mood tracker
+            function initMoodTracker() {
+                // Load mood history from local storage
+                const moodHistory = JSON.parse(localStorage.getItem('moodHistory')) || [];
+                
+                // If there's mood history, update the chart
+                if (moodHistory.length > 0) {
+                    updateMoodChart(moodHistory);
+                }
+            }
+            
+            // Handle mood selection
+            function handleMoodSelection(mood) {
+                // Create mood entry
+                const moodEntry = {
+                    mood: mood,
+                    timestamp: new Date().toISOString(),
+                    date: new Date().toLocaleDateString()
+                };
+                
+                // Get existing mood history or initialize empty array
+                let moodHistory = JSON.parse(localStorage.getItem('moodHistory')) || [];
+                
+                // Add new entry
+                moodHistory.push(moodEntry);
+                
+                // Keep only the last 7 entries
+                if (moodHistory.length > 7) {
+                    moodHistory = moodHistory.slice(moodHistory.length - 7);
+                }
+                
+                // Save to local storage
+                localStorage.setItem('moodHistory', JSON.stringify(moodHistory));
+                
+                // Update the chart
+                updateMoodChart(moodHistory);
+                
+                // Add bot response about mood
+                respondToMoodSelection(mood);
+            }
+            
+            // Update mood chart
+            function updateMoodChart(moodHistory) {
+                if (moodHistory.length === 0) return;
+                
+                // Clear placeholder
+                moodChart.innerHTML = '';
+                
+                // Create simple text-based visualization
+                const chartContent = document.createElement('div');
+                chartContent.className = 'mood-chart-content';
+                
+                // Create mood entries
+                moodHistory.forEach(entry => {
+                    const moodItem = document.createElement('div');
+                    moodItem.className = `mood-history-item mood-${entry.mood}`;
+                    
+                    const moodDate = document.createElement('span');
+                    moodDate.className = 'mood-date';
+                    moodDate.textContent = entry.date;
+                    
+                    const moodIcon = document.createElement('span');
+                    moodIcon.className = 'mood-icon';
+                    
+                    // Set icon based on mood
+                    let iconSVG = '';
+                    switch(entry.mood) {
+                        case 'great':
+                            iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="#FFB347"><path d="M12,17.5C14.33,17.5 16.3,16.04 17.11,14H6.89C7.69,16.04 9.67,17.5 12,17.5M8.5,11A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,11M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg>';
+                            break;
+                        case 'good':
+                            iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="#2CB67D"><path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M8.5,11A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,11M12,17A5,5 0 0,0 17,12H7A5,5 0 0,0 12,17Z" /></svg>';
+                            break;
+                        case 'okay':
+                            iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="#94A1B2"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M8.5,11A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,11M12,13A5,5 0 0,0 7,18H17A5,5 0 0,0 12,13Z" /></svg>';
+                            break;
+                        case 'bad':
+                            iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="#7F5AF0"><path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M8.5,11A1.5,1.5 0 0,0 7,9.5A1.5,1.5 0 0,0 8.5,8A1.5,1.5 0 0,0 10,9.5A1.5,1.5 0 0,0 8.5,11M15.5,11A1.5,1.5 0 0,0 14,9.5A1.5,1.5 0 0,0 15.5,8A1.5,1.5 0 0,0 17,9.5A1.5,1.5 0 0,0 15.5,11M12,14C9.66,14 7.14,15.28 5.78,17.5L7.43,18.5C8.5,16.76 10.42,15.5 12,15.5C13.58,15.5 15.5,16.76 16.57,18.5L18.22,17.5C16.86,15.28 14.34,14 12,14Z" /></svg>';
+                            break;
+                        case 'awful':
+                            iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="#EF4565"><path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M16.18,7.76L15.12,8.82L14.06,7.76L13,8.82L14.06,9.88L13,10.94L14.06,12L15.12,10.94L16.18,12L17.24,10.94L16.18,9.88L17.24,8.82L16.18,7.76M7.82,12L8.88,10.94L9.94,12L11,10.94L9.94,9.88L11,8.82L9.94,7.76L8.88,8.82L7.82,7.76L6.76,8.82L7.82,9.88L6.76,10.94L7.82,12M12,14C9.67,14 7.69,15.46 6.89,17.5H17.11C16.31,15.46 14.33,14 12,14Z" /></svg>';
+                            break;
+                    }
+                    
+                    moodIcon.innerHTML = iconSVG;
+                    
+                    const moodName = document.createElement('span');
+                    moodName.className = 'mood-name';
+                    moodName.textContent = entry.mood.charAt(0).toUpperCase() + entry.mood.slice(1);
+                    
+                    moodItem.appendChild(moodDate);
+                    moodItem.appendChild(moodIcon);
+                    moodItem.appendChild(moodName);
+                    
+                    chartContent.appendChild(moodItem);
+                });
+                
+                moodChart.appendChild(chartContent);
+            }
+            
+            // Respond to mood selection
+            function respondToMoodSelection(mood) {
+                let response = '';
+                let emotion = 'neutral';
+                
+                switch(mood) {
+                    case 'great':
+                        response = "I'm glad to hear you're feeling great today! What's contributing to your positive mood?";
+                        emotion = 'joy';
+                        break;
+                    case 'good':
+                        response = "It's good to hear you're doing well today. Is there anything specific that's making your day good?";
+                        emotion = 'joy';
+                        break;
+                    case 'okay':
+                        response = "Thanks for sharing that you're feeling okay today. Is there anything you'd like to talk about or any way I can support you?";
+                        emotion = 'neutral';
+                        break;
+                    case 'bad':
+                        response = "I'm sorry to hear you're not feeling well today. Would you like to talk about what's troubling you?";
+                        emotion = 'sadness';
+                        break;
+                    case 'awful':
+                        response = "I'm really sorry you're feeling awful today. That sounds difficult. Would it help to share what's going on?";
+                        emotion = 'sadness';
+                        break;
+                }
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Simulate response delay
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addMessage(response, 'bot', emotion);
+                }, 1000);
+            }
+            
+            // Add event listeners to mood options
+            moodOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const mood = this.getAttribute('data-mood');
+                    
+                    // Highlight selected mood
+                    moodOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    // Handle the mood selection
+                    handleMoodSelection(mood);
+                });
+            });
+            
+            // Initialize mood tracker
+            initMoodTracker();
+            
+            // Initialize server status checker
+            initServerStatusChecker();
+            
+            // Function to check and update server connection status
+            function initServerStatusChecker() {
+                const serverStatusElement = document.getElementById('server-status');
+                const statusIndicator = serverStatusElement.querySelector('.status-indicator');
+                const statusText = serverStatusElement.querySelector('.status-text');
+                
+                function checkServerStatus() {
+                    fetch('http://localhost:5005/status')
+                        .then(response => {
+                            if (response.ok) {
+                                return response.json();
+                            }
+                            throw new Error('Server connection failed');
+                        })
+                        .then(data => {
+                            // Server is connected
+                            serverStatusElement.classList.remove('disconnected');
+                            serverStatusElement.classList.add('connected');
+                            statusText.textContent = 'Connected';
+                        })
+                        .catch(error => {
+                            // Server is disconnected
+                            serverStatusElement.classList.remove('connected');
+                            serverStatusElement.classList.add('disconnected');
+                            statusText.textContent = 'Disconnected';
+                        });
+                }
+                
+                // Check immediately and then every 5 seconds
+                checkServerStatus();
+                setInterval(checkServerStatus, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
