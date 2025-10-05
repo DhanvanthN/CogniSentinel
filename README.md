@@ -109,7 +109,7 @@ http://localhost:5000
 
 ## Configuration Files
 
-### config.yml
+### config.yml(example)
 ```yaml
 language: en
 pipeline:
@@ -132,7 +132,7 @@ pipeline:
     ambiguity_threshold: 0.1
 ```
 
-### domain.yml
+### domain.yml(example)
 ```yaml
 intents:
   - greet
