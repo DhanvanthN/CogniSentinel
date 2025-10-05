@@ -1,0 +1,56 @@
+version: "3.1"
+stories:
+- story: Sadness test
+  steps:
+    - user: | 
+        I am sad
+      intent: sad
+    - action: utter_sad
+    - user: |
+        It did not help
+      intent: mood_explain
+    - action: utter_mood_explain
+
+- story: Happiness test
+  steps:
+    - user: |
+        I am happy
+      intent: happy
+    - action: utter_happy
+    - user: |
+        yes
+      intent: affirm
+    - action: utter_affirm
+
+- story: Bullying test
+  steps:
+    - user: |
+        I am being bullied
+      intent: bullied
+    - action: utter_bullied
+    - user: |
+        yes
+      intent: affirm
+    - action: utter_affirm
+
+- story: Stress test
+  steps:
+    - user: |
+        I am stressed
+      intent: stressed
+    - action: utter_stressed
+    - user: |
+        It did not help
+      intent: mood_explain
+    - action: utter_mood_explain
+
+- story: Sleep test
+  steps:
+    - user: |
+        I can't sleep
+      intent: sleep_problem
+    - action: utter_sleep_problem
+    - user: |
+        yes
+      intent: affirm
+    - action: utter_affirm
