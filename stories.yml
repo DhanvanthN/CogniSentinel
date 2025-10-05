@@ -1,0 +1,113 @@
+version: "3.1"
+stories:
+- story: Sadness support
+  steps:
+    - intent: sad
+    - action: utter_sad
+    - intent: mood_explain
+    - action: utter_mood_explain
+
+- story: Happiness support
+  steps:
+    - intent: happy
+    - action: utter_happy
+    - intent: affirm
+    - action: utter_affirm
+
+- story: Bullying support
+  steps:
+    - intent: bullied
+    - action: utter_bullied
+    - intent: affirm
+    - action: utter_affirm
+
+- story: Stress support
+  steps:
+    - intent: stressed
+    - action: utter_stressed
+    - intent: mood_explain
+    - action: utter_mood_explain
+
+- story: Loneliness support
+  steps:
+    - intent: lonely
+    - action: utter_lonely
+    - intent: affirm
+    - action: utter_affirm
+
+- story: Gratitude support
+  steps:
+    - intent: gratitude
+    - action: utter_gratitude
+    - intent: affirm
+    - action: utter_affirm
+
+- story: Help support
+  steps:
+    - intent: need_help
+    - action: utter_need_help
+    - intent: affirm
+    - action: utter_affirm
+
+- story: Sleep support
+  steps:
+    - intent: sleep_problem
+    - action: utter_sleep_problem
+    - intent: affirm
+    - action: utter_affirm
+
+- story: Motivation support
+  steps:
+    - intent: motivation
+    - action: utter_motivation
+    - intent: affirm
+    - action: utter_affirm
+
+- story: Overwhelmed support
+  steps:
+    - intent: overwhelmed
+    - action: utter_overwhelmed
+    - intent: affirm
+    - action: utter_affirm
+
+- story: Panic support
+  steps:
+    - intent: panic
+    - action: utter_panic
+    - intent: affirm
+    - action: utter_affirm
+
+- story: Self-esteem support
+  steps:
+    - intent: self_esteem
+    - action: utter_self_esteem
+    - intent: affirm
+    - action: utter_affirm
+
+- story: Relationship support
+  steps:
+    - intent: relationship
+    - action: utter_relationship
+    - intent: affirm
+    - action: utter_affirm
+
+- story: Family support
+  steps:
+    - intent: family
+    - action: utter_family
+    - intent: affirm
+    - action: utter_affirm
+
+- story: Work support
+  steps:
+    - intent: work
+    - action: utter_work
+    - intent: affirm
+    - action: utter_affirm
+
+- story: School support
+  steps:
+    - intent: school
+    - action: utter_school
+    - intent: affirm
+    - action: utter_affirm

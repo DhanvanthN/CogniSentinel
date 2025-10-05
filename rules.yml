@@ -1,0 +1,121 @@
+version: "3.1"
+rules:
+- rule: Greet user
+  steps:
+    - intent: greet
+    - action: utter_greet
+
+- rule: Goodbye user
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+- rule: Respond to sadness
+  steps:
+    - intent: sad
+    - action: utter_sad
+
+- rule: Respond to happiness
+  steps:
+    - intent: happy
+    - action: utter_happy
+
+- rule: Respond to anger
+  steps:
+    - intent: angry
+    - action: utter_angry
+
+- rule: Respond to anxiety
+  steps:
+    - intent: anxious
+    - action: utter_anxious
+
+- rule: Respond to neutral
+  steps:
+    - intent: neutral
+    - action: utter_neutral
+
+- rule: Affirmation
+  steps:
+    - intent: affirm
+    - action: utter_affirm
+
+- rule: Denial
+  steps:
+    - intent: deny
+    - action: utter_deny
+
+- rule: Mood explain
+  steps:
+    - intent: mood_explain
+    - action: utter_mood_explain
+
+- rule: Bullying support
+  steps:
+    - intent: bullied
+    - action: utter_bullied
+
+- rule: Stress support
+  steps:
+    - intent: stressed
+    - action: utter_stressed
+
+- rule: Loneliness support
+  steps:
+    - intent: lonely
+    - action: utter_lonely
+
+- rule: Gratitude support
+  steps:
+    - intent: gratitude
+    - action: utter_gratitude
+
+- rule: Help support
+  steps:
+    - intent: need_help
+    - action: utter_need_help
+
+- rule: Sleep support
+  steps:
+    - intent: sleep_problem
+    - action: utter_sleep_problem
+
+- rule: Motivation support
+  steps:
+    - intent: motivation
+    - action: utter_motivation
+
+- rule: Overwhelmed support
+  steps:
+    - intent: overwhelmed
+    - action: utter_overwhelmed
+
+- rule: Panic support
+  steps:
+    - intent: panic
+    - action: utter_panic
+
+- rule: Self-esteem support
+  steps:
+    - intent: self_esteem
+    - action: utter_self_esteem
+
+- rule: Relationship support
+  steps:
+    - intent: relationship
+    - action: utter_relationship
+
+- rule: Family support
+  steps:
+    - intent: family
+    - action: utter_family
+
+- rule: Work support
+  steps:
+    - intent: work
+    - action: utter_work
+
+- rule: School support
+  steps:
+    - intent: school
+    - action: utter_school

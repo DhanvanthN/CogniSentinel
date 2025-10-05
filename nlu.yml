@@ -1,0 +1,225 @@
+version: "3.1"
+nlu:
+- intent: greet
+  examples: |
+    - hello
+    - hi
+    - hey
+    - good morning
+    - good evening
+    - greetings
+    - what's up
+    - howdy
+    - hi there
+    - hey there
+
+- intent: goodbye
+  examples: |
+    - bye
+    - goodbye
+    - see you
+    - see you later
+    - take care
+    - talk to you soon
+    - catch you later
+    - farewell
+
+- intent: sad
+  examples: |
+    - I am sad
+    - feeling down
+    - I feel unhappy
+    - I'm depressed
+    - I'm miserable
+    - I feel blue
+    - I'm not okay
+    - I feel hopeless
+
+- intent: happy
+  examples: |
+    - I am happy
+    - feeling good
+    - I'm excited
+    - I'm joyful
+    - I'm feeling great
+    - I'm cheerful
+    - I'm in a good mood
+    - I'm content
+
+- intent: angry
+  examples: |
+    - I am angry
+    - I'm mad
+    - I'm frustrated
+    - I'm annoyed
+    - I feel rage
+    - I'm furious
+    - I'm upset
+
+- intent: anxious
+  examples: |
+    - I am anxious
+    - I'm worried
+    - I'm nervous
+    - I feel stressed
+    - I'm panicking
+    - I have anxiety
+    - I'm tense
+
+- intent: neutral
+  examples: |
+    - I'm okay
+    - I'm fine
+    - nothing much
+    - just here
+    - I'm neutral
+    - I'm alright
+    - I'm so-so
+
+- intent: affirm
+  examples: |
+    - yes
+    - yeah
+    - sure
+    - absolutely
+    - of course
+    - definitely
+    - I agree
+
+- intent: deny
+  examples: |
+    - no
+    - nope
+    - not really
+    - never
+    - I don't think so
+    - no thanks
+
+- intent: mood_explain
+  examples: |
+    - It did not help
+    - I still feel bad
+    - I feel worse
+    - I feel better
+    - That helped
+    - Not really
+    - I don't know
+
+- intent: bullied
+  examples: |
+    - I was bullied
+    - Someone bullied me
+    - I am being bullied
+    - People are mean to me
+    - I feel bullied
+    - I'm being picked on
+
+- intent: stressed
+  examples: |
+    - I am stressed
+    - I feel overwhelmed
+    - Too much work
+    - I'm under pressure
+    - I'm stressed out
+    - I can't handle it
+
+- intent: lonely
+  examples: |
+    - I am lonely
+    - I feel alone
+    - No one to talk to
+    - I have no friends
+    - I feel isolated
+    - I'm by myself
+
+- intent: gratitude
+  examples: |
+    - I am grateful
+    - I feel thankful
+    - I appreciate my family
+    - I am thankful for my friends
+    - I am blessed
+    - I'm lucky
+
+- intent: need_help
+  examples: |
+    - I need help
+    - Can you help me?
+    - I need support
+    - I need advice
+    - I need guidance
+    - I need someone to talk to
+
+- intent: sleep_problem
+  examples: |
+    - I can't sleep
+    - I have trouble sleeping
+    - I have insomnia
+    - I wake up at night
+    - I am tired
+    - I can't rest
+
+- intent: motivation
+  examples: |
+    - I need motivation
+    - I feel unmotivated
+    - Help me get motivated
+    - I want to be productive
+    - I need encouragement
+    - I can't focus
+
+- intent: overwhelmed
+  examples: |
+    - I feel overwhelmed
+    - Everything is too much
+    - I can't cope
+    - I'm overloaded
+    - I'm swamped
+
+- intent: panic
+  examples: |
+    - I'm panicking
+    - I have a panic attack
+    - I feel panic
+    - I can't breathe
+    - I'm freaking out
+
+- intent: self_esteem
+  examples: |
+    - I have low self-esteem
+    - I don't feel good about myself
+    - I feel worthless
+    - I lack confidence
+    - I feel insecure
+
+- intent: relationship
+  examples: |
+    - I'm having relationship problems
+    - My partner and I argued
+    - I feel unloved
+    - My relationship is struggling
+    - I feel rejected
+
+- intent: family
+  examples: |
+    - I have family issues
+    - My parents are fighting
+    - My family doesn't understand me
+    - I feel distant from my family
+    - I have problems at home
+
+- intent: work
+  examples: |
+    - Work is stressful
+    - I have problems at work
+    - My boss is mean
+    - I can't handle my job
+    - I'm unhappy at work
+
+- intent: school
+  examples: |
+    - School is hard
+    - I have too much homework
+    - I'm failing my classes
+    - I can't keep up at school
+    - I'm stressed about school
